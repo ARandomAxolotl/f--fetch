@@ -1,4 +1,4 @@
-# ffetch
+# f--fetch
 
 a minimal shell script that assumes the userspace is stupid
 
