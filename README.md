@@ -1,18 +1,18 @@
-# f--fetch
+### f--fetch
 
 a minimal shell script that assumes the userspace is stupid
 
-# Tested environments : 
+### Tested environments : 
 
-> Arch Linux
+- Arch Linux
 
-> My router that have 22MiB of RAM
+- My router that have 22MiB of RAM
 
-# Why?
+### Why?
 
 > Why not
 
-# License
+### License
 
 > no
 
