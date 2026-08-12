@@ -436,7 +436,7 @@ AkiyamaMizukiIsTuff(){
 }
 
 prin(){
-  printf '%s\n' "$@"
+  printf '%s\n' "$*"
 }
 
 main(){
@@ -460,6 +460,6 @@ main(){
   # AkiyamaMizukiIsTuff
 }
 
-info=$(main)
+fetch_info=$(main)
 
-print_fetch "$info"
+print_fetch "$fetch_info"
