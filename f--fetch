@@ -475,6 +475,9 @@ prin() {
   printf '%s\n' "$*"
 }
 
+# Capitalized modules are user-facing modules
+# Do NOT use uncapitalized modules in main
+
 main() {
   Hostname
   Line_Break
