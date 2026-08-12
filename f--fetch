@@ -381,7 +381,7 @@ if hascmd wc; then
       printf '%s' "no"
     fi
 
-    printf '\b%s\n' "$RESET"
+    printf '%s\n' "$RESET"
   }
 else
   err "Command 'wc' not found!"
