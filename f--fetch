@@ -304,7 +304,7 @@ if hascmd wc; then
     printf '%-10s : %s' "Packages" "$GREEN"
     
     if hascmd apt; then
-      printf 'apt (%s), ' "$(( $(apt list --installed | wc -l) - 1 ))"
+      printf 'apt (%s), ' "$(( $(apt list --installed 2>/dev/null | wc -l) - 1 ))"
       pkg=1
     fi
 
