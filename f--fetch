@@ -32,6 +32,10 @@ color() {
     printf '%s%s%s\n' "$1" "$2" "$RESET"
 }
 
+info(){
+  printf '%-10s : %s\n' "$1" "$GREEN$2$RESET"
+}
+
 logo=$(
     color "$transBLUE" '          _    _                               __  __ _           _    _ '
     color "$transPINK" '    /\   | |  (_)                             |  \/  (_)         | |  (_)'
@@ -48,12 +52,13 @@ if command >/dev/null 2>&1; then
     command -v "$1" >/dev/null 2>&1
   }
 else
-  err "Command 'command' not found! Failing back to 'type'."
+  err "Command 'command' not found! Falling back to 'type'."
   hascmd() {
     type "$1" >/dev/null 2>&1
   }
 fi
 
+# Use this when the entire shit is done
 print_fetch() {
     info=$1
 
@@ -122,16 +127,16 @@ fi
 case "$OS" in
   Darwin)
     Hostname() {
-      printf "$GREEN$USER@$(sysctl -n kern.hostname)$RESET\n"
+      info "$USER@$(sysctl -n kern.hostname)"
     }
     
     Init(){
-      printf '%-10s : %s\n' "Init" "${GREEN}Launchd$RESET"
+      info "Init" "launchd"
 
     }
 
     Desktop() {
-      printf '%-10s : %s\n' "Desktop" "${GREEN}Springboard$RESET"
+      info "Desktop" "Springboard"
     }
 
     OS() {
@@ -146,19 +151,19 @@ case "$OS" in
           DarwinOS=macOS
         ;;
       esac
-      printf '%-10s : %s %s\n' "OS" "$GREEN$DarwinOS" "$(sysctl -n kern.osproductversion)$RESET"
+      info "OS" "$DarwinOS $(sysctl -n kern.osproductversion)"
     }
     
     Memory() {
       MemBytes="$(sysctl -n hw.memsize)"
       MemMiB=$((MemBytes / 1024 / 1024))
-      printf '%-10s : %s (Swap : %s)\n' "Memory" "$GREEN${MemMiB}MiB" "$(sysctl -n vm.swapusage)$RESET"
+      info "Memory" "{MemMiB}MiB (Swap : $(sysctl -n vm.swapusage))"
     }
 
     CPU() {
       CPU="$(sysctl -n machdep.cpu.brand_string)"
       Cores="$(sysctl -n machdep.cpu.core_count)"
-      printf '%-10s : %s\n' "CPU" "$GREEN$CPU (${Cores} cores, $(sysctl -n hw.perflevel0.physicalcpu)P + $(sysctl -n hw.perflevel1.physicalcpu)E)$RESET"
+      info "CPU" "$CPU (${Cores} cores, $(sysctl -n hw.perflevel0.physicalcpu)P + $(sysctl -n hw.perflevel1.physicalcpu)E)"
     }
 
     if hascmd awk; then
@@ -167,16 +172,16 @@ case "$OS" in
         Now="$(date +%s)"
         Uptime=$((Now - Boot))
 
-       printf '%-10s : %s\n' "Uptime" \
-        "$GREEN$((Uptime / 86400)) days, $(printf '%02d:%02d:%02d' \
-        "$((Uptime / 3600 % 24))" \
-        "$((Uptime / 60 % 60))" \
-        "$((Uptime % 60))")$RESET"
+        info "Uptime" \
+          "$((Uptime / 86400)) days, $(printf '%02d:%02d:%02d' \
+          "$((Uptime / 3600 % 24))" \
+          "$((Uptime / 60 % 60))" \
+          "$((Uptime % 60))")"
       }
 
       LoadAVG() {
         Load="$(sysctl -n vm.loadavg | awk '{print $2, $3, $4}')"
-        printf '%-10s : %s\n' "Load AVG" "$GREEN$Load$RESET"
+        info "Load AVG" "$Load"
       }
 
     else
@@ -199,7 +204,7 @@ case "$OS" in
         if [ "$USER" = "root" ]; then
           Init() {
             init=$(readlink -f /proc/1/exe)
-            printf '%-10s : %s\n' "Init" "$GREEN$(basename "$init")$RESET"
+            info "Init" "$(basename "$init")"
           }
         fi
       else
@@ -212,7 +217,7 @@ case "$OS" in
     if [ -f /etc/os-release ]; then
       OS() {
         . /etc/os-release
-        printf '%-10s : %s\n' "OS" "$GREEN$PRETTY_NAME$RESET"
+        info "OS" "$PRETTY_NAME"
       }
     else
       OS() {
@@ -237,11 +242,11 @@ case "$OS" in
         if [ "x$CPU" = "x" ];then
           CPU=idk
         fi
-        printf '%-10s : %s\n' "CPU" "$GREEN$CPU$RESET"
+        info "CPU" "$CPU"
       }
 
       Uptime() {
-        printf '%-10s : %s\n' "Uptime" "$GREEN$(awk '{printf "%d days, %02d:%02d:%02d\n", $1/86400, $1/3600%24, $1/60%60, $1%60}' /proc/uptime)$RESET"
+        info "Uptime" "$(awk '{printf "%d days, %02d:%02d:%02d\n", $1/86400, $1/3600%24, $1/60%60, $1%60}' /proc/uptime)"
       }
 
     else
@@ -250,7 +255,7 @@ case "$OS" in
 
     Desktop() {
       if [ "x$DESKTOP_SESSION" != "x" ]; then
-        printf '%-10s : %s\n' "Desktop" "$GREEN$DESKTOP_SESSION$RESET"
+        info "Desktop" "$DESKTOP_SESSION"
       fi
     }
 
@@ -268,7 +273,7 @@ case "$OS" in
 
     LoadAVG() {
       if [ -f /proc/loadavg ]; then
-        printf '%-10s : %s\n' "Load AVG" "$GREEN$(cat /proc/loadavg)$RESET"
+        info "Load AVG" "$(cat /proc/loadavg)"
       fi
     }
 
@@ -277,21 +282,25 @@ case "$OS" in
 esac
 
 Shell() {
-  printf '%-10s : %s\n' "Shell" "$GREEN$SHELL$RESET"
+  set "usershell=$SHELL"
+  if hascmd basename; then
+    usershell="$(basename $SHELL)"
+  fi
+  info "Shell" "$usershell"
 }
 
 Terminal() {
-  printf '%-10s : %s\n' "Terminal" "$GREEN$TERM$RESET"
+  info "Terminal" "$TERM"
 }
 
 if hascmd uname;then
   Kernel() {
-    printf '%-10s : %s\n' "Kernel" "$GREEN$(uname -sr)$RESET"
+    info "Kernel" "$(uname -sr)"
     Arch="$(uname -p)"
     if [ "$Arch" = "unknown" ];then
-      printf '%-10s : %s\n' "Arch" "$GREEN$(uname -m)$RESET"
+      info "Arch" "$(uname -m)"
     else
-      printf '%-10s : %s\n' "Arch" "$GREEN$Arch$RESET"
+      info "Arch" "$Arch"
     fi
   }
 else
@@ -299,13 +308,13 @@ else
     Linux)
       err "Comamnd 'uname' not found! Using the good old /proc."
       Kernel() {
-        printf '%-10s : %s\n' "Kernel" "$GREEN$(cat /proc/version)$RESET"
+        info "Kernel" "$(cat /proc/version)"
       }
       ;;
     Darwin)
       err "Comamnd 'uname' not found! Using the good old sysctl."
       Kernel() {
-        printf '%-10s : %s\n' "Kernel" "$GREEN$(sysctl -n kern.version)$RESET"
+        info "Kernel" "$(sysctl -n kern.version)"
       }
       ;;
   esac
@@ -380,7 +389,7 @@ fi
 
 Language() {
   if [ "x$LANG" != "x" ]; then
-    printf '%-10s : %s\n' "Language" "$GREEN$LANG$RESET"
+    info "Language" "$LANG"
   fi
 }
 
@@ -414,6 +423,22 @@ Line_Break(){
   printf '%s\n' '--------------------------'
 }
 
+TTY(){
+  if hascmd tty; then
+    info "TTY" "$(tty)"
+  else
+    err "Command 'tty' not found!"
+  fi
+}
+
+AkiyamaMizukiIsTuff(){
+  printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} tuff$RESET"
+}
+
+prin(){
+  printf '%s\n' "$@"
+}
+
 main(){
   Hostname
   Line_Break
@@ -421,6 +446,7 @@ main(){
   Init
   Shell
   Terminal
+  TTY
   Break
   Kernel
   Memory
@@ -431,6 +457,7 @@ main(){
   Break
   LoadAVG
   Colors
+  # AkiyamaMizukiIsTuff
 }
 
 info=$(main)
