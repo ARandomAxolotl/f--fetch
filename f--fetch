@@ -118,7 +118,7 @@ fi
 case "$OS" in
   Darwin)
     Hostname() {
-      printf "$GREEN$(sysctl -n kern.hostname)@$USER$RESET\n"
+      printf "$GREEN$USER@$(sysctl -n kern.hostname)$RESET\n"
     }
     
     Init(){
@@ -178,9 +178,9 @@ case "$OS" in
   Linux)
     Hostname() {
       if hascmd hostname; then
-        printf "$GREEN$(hostname)@$USER$RESET\n"
+        printf "$GREEN$USER@$(hostname)$RESET\n"
       else
-        printf "${RED}Null${RESET}@$GREEN$USER$RESET\n"
+        printf "$RED$USER$RESET@${RED}idk$RESET\n"
       fi
     }
 
