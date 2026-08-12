@@ -108,6 +108,10 @@ Music() {
   :
 }
 
+LoadAVG(){
+  :
+}
+
 if [ "$OS" = "Darwin" ]; then
   if ! hascmd sysctl; then
     err "Command 'sysctl' not found! Aborting fetch."
@@ -169,6 +173,12 @@ case "$OS" in
         "$((Uptime / 60 % 60))" \
         "$((Uptime % 60))")$RESET"
       }
+
+      LoadAVG() {
+        Load="$(sysctl -n vm.loadavg | awk '{print $2, $3, $4}')"
+        printf '%-10s : %s\n' "Load AVG" "$GREEN$Load$RESET"
+      }
+
     else
       err "What kind of apple produc is this that have to awk?"
     fi
@@ -255,6 +265,14 @@ case "$OS" in
     else
       err "Command 'playerctl' not found! No music information :( "
     fi
+
+    LoadAVG() {
+      if [ -f /proc/loadavg ]; then
+        printf '%-10s : %s\n' "Load AVG" "$GREEN$(cat /proc/loadavg)$RESET"
+      fi
+    }
+
+
     ;;
 esac
 
@@ -360,22 +378,11 @@ else
   err "Command 'wc' not found!"
 fi
 
-
-
 Language() {
   if [ "x$LANG" != "x" ]; then
     printf '%-10s : %s\n' "Language" "$GREEN$LANG$RESET"
   fi
 }
-
-LoadAVG() {
-  if [ -f /proc/loadavg ]; then
-    printf '%-10s : %s\n' "Load AVG" "$GREEN$(cat /proc/loadavg)$RESET"
-  fi
-}
-
-
-
 
 Colors(){
   printf '%s███%s' "$BLACK" "$RESET"
