@@ -1,8 +1,8 @@
-### f--fetch
+# f--fetch
 
 a minimal shell script that assumes the userspace is stupid
 
-### Tested environments : 
+## Tested environments : 
 
 - Arch Linux
 
@@ -10,11 +10,24 @@ a minimal shell script that assumes the userspace is stupid
 
 - My jailbroken iPhone 8 plus
 
-### Why?
+## Installation : 
 
-> Why not
+Download the script
 
-### License
+Run it(`chmod +x` if required)
 
-> no
+Move to directory that's in PATH if you want to (like ``~/.local/bin`)
 
+## Dependencies : 
+
+### All : 
+
+- A POSIX-compatible shell
+
+### Linux : 
+
+- nothing
+
+### Darwin (iOS/macOS) : 
+
+- sysctl must be in PATH
