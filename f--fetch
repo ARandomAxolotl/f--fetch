@@ -154,7 +154,7 @@ case "$OS" in
     CPU() {
       CPU="$(sysctl -n machdep.cpu.brand_string)"
       Cores="$(sysctl -n machdep.cpu.core_count)"
-      printf '%-10s : %s\n' "CPU" "$GREEN$CPU (${Cores} cores)$RESET"
+      printf '%-10s : %s\n' "CPU" "$GREEN$CPU (${Cores} cores, $(sysctl -n hw.perflevel0.physicalcpu)P + $(sysctl -n hw.perflevel1.physicalcpu)E)$RESET"
     }
 
     if hascmd awk; then
@@ -410,6 +410,7 @@ Line_Break(){
 main(){
   Hostname
   Line_Break
+  OS
   Shell
   Terminal
   Break
