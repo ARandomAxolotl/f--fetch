@@ -412,6 +412,24 @@ if hascmd wc; then
       printf 'winget(%s)' "$(($(winget list | wc -l) - 2))"
     fi
 
+    if hascmd choco; then
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'chocolatey(%s)' "$(($(choco list | wc -l) - 2))"
+    fi
+
+    if hascmd scoop; then
+      if [ "$pkg" = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'scoop(%s)' "$(scoop list | tail -n +5 | awk 'NF { count++ } END { print count+0 }')"
+    fi
+
     if [ $pkg = 0 ]; then
       err "No known packages manager found!"
       printf '%s' "no"
@@ -471,8 +489,12 @@ AkiyamaMizukiIsTuff() {
   printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} tuff$RESET"
 }
 
-prin() {
+Prin() {
   printf '%s\n' "$*"
+}
+
+Prin_no_endl() {
+  prinf '%s' "$*"
 }
 
 # Capitalized modules are user-facing modules
@@ -493,9 +515,10 @@ main() {
   Uptime
   Packages
   Music
-  Break
   LoadAVG
+  Desktop
   Colors
+  # Colors sometimes doesn't show for some reason so you can disable it
   # AkiyamaMizukiIsTuff
 }
 
