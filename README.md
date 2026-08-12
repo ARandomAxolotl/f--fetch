@@ -10,6 +10,8 @@ a minimal shell script that assumes the userspace is stupid
 
 - My jailbroken iPhone 8 plus
 
+- Git bash
+
 ## Installation : 
 
 Download the script

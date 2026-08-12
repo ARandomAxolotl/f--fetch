@@ -25,26 +25,26 @@ BRIGHT_WHITE=$(printf '\033[97m')
 RESET=$(printf '\033[0m')
 
 err() {
-    printf '%s\n' "$RED$*$RESET" >&2
+  printf '%s\n' "$RED$*$RESET" >&2
 }
 
 color() {
-    printf '%s%s%s\n' "$1" "$2" "$RESET"
+  printf '%s%s%s\n' "$1" "$2" "$RESET"
 }
 
-info(){
+info() {
   printf '%-10s : %s\n' "$1" "$GREEN$2$RESET"
 }
 
 logo=$(
-    color "$transBLUE" '          _    _                               __  __ _           _    _ '
-    color "$transPINK" '    /\   | |  (_)                             |  \/  (_)         | |  (_)'
-    color "$transPINK" '   /  \  | | ___ _   _  __ _ _ __ ___   __ _  | \  / |_ _____   _| | ___ '
-    color "$transWHITE" '  / /\ \ | |/ / | | | |/ _` | '\''_ ` _ \ / _` | | |\/| | |_  / | | | |/ / |'
-    color "$transWHITE" ' / ____ \|   <| | |_| | (_| | | | | | | (_| | | |  | | |/ /| |_| |   <| |'
-    color "$transPINK" '/_/    \_\_|\_\_|\__, |\__,_|_| |_| |_|\__,_| |_|  |_|_/___|\__,_|_|\_\_|'
-    color "$transPINK" '                  __/ |                                                  '
-    color "$transBLUE" '                 |___/                                                   '
+  color "$transBLUE" '          _    _                               __  __ _           _    _ '
+  color "$transPINK" '    /\   | |  (_)                             |  \/  (_)         | |  (_)'
+  color "$transPINK" '   /  \  | | ___ _   _  __ _ _ __ ___   __ _  | \  / |_ _____   _| | ___ '
+  color "$transWHITE" '  / /\ \ | |/ / | | | |/ _` | '\''_ ` _ \ / _` | | |\/| | |_  / | | | |/ / |'
+  color "$transWHITE" ' / ____ \|   <| | |_| | (_| | | | | | | (_| | | |  | | |/ /| |_| |   <| |'
+  color "$transPINK" '/_/    \_\_|\_\_|\__, |\__,_|_| |_| |_|\__,_| |_|  |_|_/___|\__,_|_|\_\_|'
+  color "$transPINK" '                  __/ |                                                  '
+  color "$transBLUE" '                 |___/                                                   '
 )
 
 if command >/dev/null 2>&1; then
@@ -60,29 +60,29 @@ fi
 
 # Use this when the entire shit is done
 print_fetch() {
-    info=$1
+  info=$1
 
-    exec 3<<EOF
+  exec 3<<EOF
 $info
 EOF
 
-    while :; do
-        logo_line=
-        info_line=
+  while :; do
+    logo_line=
+    info_line=
 
-        IFS= read -r logo_line <&0 || logo_done=1
-        IFS= read -r info_line <&3 || info_done=1
+    IFS= read -r logo_line <&0 || logo_done=1
+    IFS= read -r info_line <&3 || info_done=1
 
-        [ -n "$logo_line" ] || [ -n "$info_line" ] || break
+    [ -n "$logo_line" ] || [ -n "$info_line" ] || break
 
-        printf '%-73s %s\n' "$logo_line" "$info_line"
+    printf '%-73s %s\n' "$logo_line" "$info_line"
 
-        unset logo_done info_done
-    done <<EOF
+    unset logo_done info_done
+  done <<EOF
 $logo
 EOF
 
-    exec 3<&-
+  exec 3<&-
 }
 
 if hascmd uname; then
@@ -91,7 +91,6 @@ else
   OS=Linux
   err "Command 'uname' not found! Defaulting to Linux."
 fi
-
 
 Init() {
   :
@@ -113,7 +112,11 @@ Music() {
   :
 }
 
-LoadAVG(){
+LoadAVG() {
+  :
+}
+
+OS() {
   :
 }
 
@@ -125,80 +128,81 @@ if [ "$OS" = "Darwin" ]; then
 fi
 
 case "$OS" in
-  Darwin)
-    Hostname() {
-      info "$USER@$(sysctl -n kern.hostname)"
-    }
-    
-    Init(){
-      info "Init" "launchd"
+Darwin)
+  Hostname() {
+    info "$USER@$(sysctl -n kern.hostname)"
+  }
 
-    }
+  Init() {
+    info "Init" "launchd"
 
-    Desktop() {
-      info "Desktop" "Springboard"
-    }
+  }
 
-    OS() {
-      case "$(sysctl -n hw.product)" in
-        iPhone*)
-          DarwinOS=iOS
-          ;;
-        iPad*)
-          DarwinOS=iPadOS
-          ;;
-        *)
-          DarwinOS=macOS
-        ;;
-      esac
-      info "OS" "$DarwinOS $(sysctl -n kern.osproductversion)"
-    }
-    
-    Memory() {
-      MemBytes="$(sysctl -n hw.memsize)"
-      MemMiB=$((MemBytes / 1024 / 1024))
-      info "Memory" "${MemMiB}MiB (Swap : $(sysctl -n vm.swapusage))"
-    }
+  Desktop() {
+    info "Desktop" "Springboard"
+  }
 
-    CPU() {
-      CPU="$(sysctl -n machdep.cpu.brand_string)"
-      Cores="$(sysctl -n machdep.cpu.core_count)"
-      info "CPU" "$CPU (${Cores} cores, $(sysctl -n hw.perflevel0.physicalcpu)P + $(sysctl -n hw.perflevel1.physicalcpu)E)"
-    }
+  OS() {
+    case "$(sysctl -n hw.product)" in
+    iPhone*)
+      DarwinOS=iOS
+      ;;
+    iPad*)
+      DarwinOS=iPadOS
+      ;;
+    *)
+      DarwinOS=macOS
+      ;;
+    esac
+    info "OS" "$DarwinOS $(sysctl -n kern.osproductversion)"
+  }
 
-    if hascmd awk; then
-      Uptime() {
-        Boot="$(sysctl -n kern.boottime | awk -F'[ =,}]+' '{print $3}')"
-        Now="$(date +%s)"
-        Uptime=$((Now - Boot))
+  Memory() {
+    MemBytes="$(sysctl -n hw.memsize)"
+    MemMiB=$((MemBytes / 1024 / 1024))
+    info "Memory" "${MemMiB}MiB (Swap : $(sysctl -n vm.swapusage))"
+  }
 
-        info "Uptime" \
-          "$((Uptime / 86400)) days, $(printf '%02d:%02d:%02d' \
+  CPU() {
+    CPU="$(sysctl -n machdep.cpu.brand_string)"
+    Cores="$(sysctl -n machdep.cpu.core_count)"
+    info "CPU" "$CPU (${Cores} cores, $(sysctl -n hw.perflevel0.physicalcpu)P + $(sysctl -n hw.perflevel1.physicalcpu)E)"
+  }
+
+  if hascmd awk; then
+    Uptime() {
+      Boot="$(sysctl -n kern.boottime | awk -F'[ =,}]+' '{print $3}')"
+      Now="$(date +%s)"
+      Uptime=$((Now - Boot))
+
+      info "Uptime" \
+        "$((Uptime / 86400)) days, $(printf '%02d:%02d:%02d' \
           "$((Uptime / 3600 % 24))" \
           "$((Uptime / 60 % 60))" \
           "$((Uptime % 60))")"
-      }
-
-      LoadAVG() {
-        Load="$(sysctl -n vm.loadavg | awk '{print $2, $3, $4}')"
-        info "Load AVG" "$Load"
-      }
-
-    else
-      err "What kind of apple produc is this that have to awk?"
-    fi
-    
-    ;;
-
-  Linux)
-    Hostname() {
-      if hascmd hostname; then
-        printf '%s\n' "$GREEN$USER@$(hostname)$RESET"
-      else
-        printf '%s\n' "$RED$USER$RESET@${RED}idk$RESET"
-      fi
     }
 
+    LoadAVG() {
+      Load="$(sysctl -n vm.loadavg | awk '{print $2, $3, $4}')"
+      info "Load AVG" "$Load"
+    }
+
+  else
+    err "What kind of apple produc is this that have to awk?"
+  fi
+
+  ;;
+
+Linux | MINGW* | MSYS* | CYGWIN*)
+  Hostname() {
+    if hascmd hostname; then
+      printf '%s\n' "$GREEN$USER@$(hostname)$RESET"
+    else
+      printf '%s\n' "$RED$USER$RESET@${RED}idk$RESET"
+    fi
+  }
+
+  if [ "$OS" = "Linux" ]; then
     if hascmd readlink; then
       if hascmd basename; then
         if [ "$USER" = "root" ]; then
@@ -213,7 +217,13 @@ case "$OS" in
     else
       err "Command 'readlink' not found!"
     fi
+  else
+    Init() {
+      info "Init" "wininit.exe"
+    }
+  fi
 
+  if [ "$OS" = "Linux" ]; then
     if [ -f /etc/os-release ]; then
       OS() {
         . /etc/os-release
@@ -225,35 +235,41 @@ case "$OS" in
       }
       err "/etc/os-release not found! Bro have no identity like Mafuyu."
     fi
+  else
+    OS() {
+      info "OS" "Windows"
+    }
+  fi
 
-    if hascmd awk;then
-      Memory() {
-        MemTotal="$(awk '/^MemTotal:/ { print $2 }' /proc/meminfo)"
-        MemMiB=$((MemTotal / 1024))
-        printf '%-10s : %s ' "Memory" "$GREEN${MemMiB}MiB"
-        if [ -f /proc/swaps ]; then
-          printf '%s' "$(awk 'NR > 1 { printf "%s%s : %sMiB", (NR > 2 ? ", " : "("), $1, $3/1024 } END { print ")" }' /proc/swaps)"
-        fi
-        printf '%s \n' "$RESET"
-        }
-  
-      CPU() {
-        CPU="$(awk -F: '/^model name/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
-        if [ "x$CPU" = "x" ];then
-          CPU=idk
-          err 'No idea what the hell is the cpu.'
-        fi
-        info "CPU" "$CPU"
-      }
+  if hascmd awk; then
+    Memory() {
+      MemTotal="$(awk '/^MemTotal:/ { print $2 }' /proc/meminfo)"
+      MemMiB=$((MemTotal / 1024))
+      printf '%-10s : %s ' "Memory" "$GREEN${MemMiB}MiB"
+      if [ -f /proc/swaps ]; then
+        printf '%s' "$(awk 'NR > 1 { printf "%s%s : %sMiB", (NR > 2 ? ", " : "("), $1, $3/1024 } END { print ")" }' /proc/swaps)"
+      fi
+      printf '%s \n' "$RESET"
+    }
 
-      Uptime() {
-        info "Uptime" "$(awk '{printf "%d days, %02d:%02d:%02d\n", $1/86400, $1/3600%24, $1/60%60, $1%60}' /proc/uptime)"
-      }
+    CPU() {
+      CPU="$(awk -F: '/^model name/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
+      if [ "x$CPU" = "x" ]; then
+        CPU=idk
+        err 'No idea what the hell is the cpu.'
+      fi
+      info "CPU" "$CPU"
+    }
 
-    else
-      err "WHAT THE FUCK THERE'S NO awk???"
-    fi
+    Uptime() {
+      info "Uptime" "$(awk '{printf "%d days, %02d:%02d:%02d\n", $1/86400, $1/3600%24, $1/60%60, $1%60}' /proc/uptime)"
+    }
 
+  else
+    err "WHAT THE FUCK THERE'S NO awk???"
+  fi
+
+  if [ "$OS" = "Linux" ]; then
     Desktop() {
       if [ "x$DESKTOP_SESSION" != "x" ]; then
         info "Desktop" "$DESKTOP_SESSION"
@@ -261,29 +277,37 @@ case "$OS" in
         err "Are you running in the tty?"
       fi
     }
+  else
+    Desktop() {
+      info "Desktop" "explorer.exe"
+    }
+  fi
 
+  if [ "$OS" = "Linux" ]; then
     if hascmd playerctl; then
       Music() {
         title=$(playerctl metadata xesam:title)
-          if [ "x$title" != "x" ];then
-            printf '%-10s : %s(%s)\n%s' \
-              "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" "$RESET"
+        if [ "x$title" != "x" ]; then
+          printf '%-10s : %s(%s)\n%s' \
+            "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" "$RESET"
         fi
       }
     else
       err "Command 'playerctl' not found! No music information :( "
     fi
+  fi
 
-    LoadAVG() {
-      if [ -f /proc/loadavg ]; then
-        info "Load AVG" "$(cat /proc/loadavg)"
-      else
-        err "/proc/loadavg not found! Maybe there's no load."
-      fi
-    }
-
-
-    ;;
+  LoadAVG() {
+    if [ -f /proc/loadavg ]; then
+      info "Load AVG" "$(cat /proc/loadavg)"
+    else
+      err "/proc/loadavg not found! Maybe there's no load."
+    fi
+  }
+  ;;
+*)
+  err "idk what OS is $OS"
+  ;;
 esac
 
 Shell() {
@@ -298,11 +322,11 @@ Terminal() {
   info "Terminal" "$TERM"
 }
 
-if hascmd uname;then
+if hascmd uname; then
   Kernel() {
     info "Kernel" "$(uname -sr)"
     Arch="$(uname -p)"
-    if [ "$Arch" = "unknown" ];then
+    if [ "$Arch" = "unknown" ]; then
       info "Arch" "$(uname -m)"
     else
       info "Arch" "$Arch"
@@ -310,22 +334,21 @@ if hascmd uname;then
   }
 else
   case "$OS" in
-    Linux)
-      err "Comamnd 'uname' not found! Using the good old /proc."
-      Kernel() {
-        info "Kernel" "$(cat /proc/version)"
-      }
-      ;;
-    Darwin)
-      err "Comamnd 'uname' not found! Using the good old sysctl."
-      Kernel() {
-        info "Kernel" "$(sysctl -n kern.version)"
-      }
-      ;;
+  Linux)
+    err "Comamnd 'uname' not found! Using the good old /proc."
+    Kernel() {
+      info "Kernel" "$(cat /proc/version)"
+    }
+    ;;
+  Darwin)
+    err "Comamnd 'uname' not found! Using the good old sysctl."
+    Kernel() {
+      info "Kernel" "$(sysctl -n kern.version)"
+    }
+    ;;
   esac
 
 fi
-
 
 Packages() {
   :
@@ -334,7 +357,7 @@ if hascmd wc; then
   Packages() {
     pkg=0
     printf '%-10s : %s' "Packages" "$GREEN"
-    
+
     if hascmd dpkg-query; then
       if [ $pkg = 0 ]; then
         pkg=1
@@ -352,7 +375,7 @@ if hascmd wc; then
       fi
       printf 'pacman(%s)' "$(pacman -Q | wc -l)"
     fi
-    
+
     if hascmd dnf5; then
       if [ $pkg = 0 ]; then
         pkg=1
@@ -370,7 +393,6 @@ if hascmd wc; then
       fi
       printf 'dnf(%s)' "$(dnf list --installed | wc -l)"
     fi
-
 
     if hascmd flatpak; then
       if [ $pkg = 0 ]; then
@@ -398,7 +420,7 @@ Language() {
   fi
 }
 
-Colors(){
+Colors() {
   printf '%s███%s' "$BLACK" "$RESET"
   printf '%s███%s' "$RED" "$RESET"
   printf '%s███%s' "$GREEN" "$RESET"
@@ -420,15 +442,15 @@ Colors(){
   printf '\n'
 }
 
-Break(){
+Break() {
   printf '\n'
 }
 
-Line_Break(){
+Line_Break() {
   printf '%s\n' '--------------------------'
 }
 
-TTY(){
+TTY() {
   if hascmd tty; then
     info "TTY" "$(tty)"
   else
@@ -436,15 +458,15 @@ TTY(){
   fi
 }
 
-AkiyamaMizukiIsTuff(){
+AkiyamaMizukiIsTuff() {
   printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} tuff$RESET"
 }
 
-prin(){
+prin() {
   printf '%s\n' "$*"
 }
 
-main(){
+main() {
   Hostname
   Line_Break
   OS
