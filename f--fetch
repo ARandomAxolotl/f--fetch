@@ -403,6 +403,15 @@ if hascmd wc; then
       printf 'flatpak(%s)' "$(flatpak list | wc -l)"
     fi
 
+    if hascmd winget; then
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'winget(%s)' "$(($(winget list | wc -l) - 2))"
+    fi
+
     if [ $pkg = 0 ]; then
       err "No known packages manager found!"
       printf '%s' "no"
