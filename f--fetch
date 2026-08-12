@@ -157,7 +157,7 @@ case "$OS" in
     Memory() {
       MemBytes="$(sysctl -n hw.memsize)"
       MemMiB=$((MemBytes / 1024 / 1024))
-      info "Memory" "{MemMiB}MiB (Swap : $(sysctl -n vm.swapusage))"
+      info "Memory" "${MemMiB}MiB (Swap : $(sysctl -n vm.swapusage))"
     }
 
     CPU() {
@@ -230,7 +230,7 @@ case "$OS" in
       Memory() {
         MemTotal="$(awk '/^MemTotal:/ { print $2 }' /proc/meminfo)"
         MemMiB=$((MemTotal / 1024))
-        printf '%-10s : %s ' "Memory" "$GREEN${MemMiB}MiB"
+        printf '%-10s : %s ' "Memory" "${MemMiB}MiB"
         if [ -f /proc/swaps ]; then
           printf '%s' "$(awk 'NR > 1 { printf "%s%s : %sMiB", (NR > 2 ? ", " : "("), $1, $3/1024 } END { print ")" }' /proc/swaps)"
         fi
