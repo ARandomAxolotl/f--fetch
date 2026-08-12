@@ -16,7 +16,7 @@ Download the script
 
 Run it(`chmod +x` if required)
 
-Move to directory that's in PATH if you want to (like ``~/.local/bin`)
+Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 ## Dependencies : 
 
