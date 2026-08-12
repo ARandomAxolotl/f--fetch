@@ -211,7 +211,7 @@ case "$OS" in
         err "Command 'basename' not found!"
       fi
     else
-      err "Comamnd 'readlink' not found!"
+      err "Command 'readlink' not found!"
     fi
 
     if [ -f /etc/os-release ]; then
@@ -223,7 +223,7 @@ case "$OS" in
       OS() {
         :
       }
-      err "/etc/os-release not found!"
+      err "/etc/os-release not found! Bro have no identity like Mafuyu."
     fi
 
     if hascmd awk;then
@@ -241,6 +241,7 @@ case "$OS" in
         CPU="$(awk -F: '/^model name/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
         if [ "x$CPU" = "x" ];then
           CPU=idk
+          err 'No idea what the hell is the cpu.'
         fi
         info "CPU" "$CPU"
       }
@@ -256,6 +257,8 @@ case "$OS" in
     Desktop() {
       if [ "x$DESKTOP_SESSION" != "x" ]; then
         info "Desktop" "$DESKTOP_SESSION"
+      else
+        err "Are you running in the tty?"
       fi
     }
 
@@ -274,6 +277,8 @@ case "$OS" in
     LoadAVG() {
       if [ -f /proc/loadavg ]; then
         info "Load AVG" "$(cat /proc/loadavg)"
+      else
+        err "/proc/loadavg not found! Maybe there's no load."
       fi
     }
 
