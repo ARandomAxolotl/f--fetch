@@ -303,24 +303,50 @@ if hascmd wc; then
     pkg=0
     printf '%-10s : %s' "Packages" "$GREEN"
     
-    if hascmd apt; then
-      printf 'apt (%s), ' "$(( $(apt list --installed 2>/dev/null | wc -l) - 1 ))"
-      pkg=1
+    if hascmd dpkg-query; then
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'dpkg (%s)' "$(dpkg-query -W | wc -l)"
     fi
 
     if hascmd pacman; then
-      printf 'pacman(%s), ' "$(pacman -Q | wc -l)"
-      pkg=1
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'pacman(%s)' "$(pacman -Q | wc -l)"
     fi
     
     if hascmd dnf5; then
-      printf 'dnf5(%s), ' "$(dnf5 list --installed | wc -l)"
-      pkg=1
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'dnf5(%s)' "$(dnf5 list --installed | wc -l)"
     fi
 
+    if hascmd dnf; then
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'dnf(%s)' "$(dnf list --installed | wc -l)"
+    fi
+
+
     if hascmd flatpak; then
-      printf 'flatpak(%s), ' "$(flatpak list | wc -l)"
-      pkg=1
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'flatpak(%s)' "$(flatpak list | wc -l)"
     fi
 
     if [ $pkg = 0 ]; then
@@ -328,7 +354,7 @@ if hascmd wc; then
       printf '%s' "no"
     fi
 
-    printf '%s\n' "$RESET"
+    printf '\b%s\n' "$RESET"
   }
 else
   err "Command 'wc' not found!"
