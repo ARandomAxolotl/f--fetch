@@ -282,7 +282,7 @@ case "$OS" in
 esac
 
 Shell() {
-  "usershell=$SHELL"
+  usershell="$SHELL"
   if hascmd basename; then
     usershell="$(basename $SHELL)"
   fi
