@@ -193,9 +193,9 @@ case "$OS" in
   Linux)
     Hostname() {
       if hascmd hostname; then
-        printf "$GREEN$USER@$(hostname)$RESET\n"
+        printf '%s\n' "$GREEN$USER@$(hostname)$RESET"
       else
-        printf "$RED$USER$RESET@${RED}idk$RESET\n"
+        printf '%s\n' "$RED$USER$RESET@${RED}idk$RESET"
       fi
     }
 
@@ -284,7 +284,7 @@ esac
 Shell() {
   usershell="$SHELL"
   if hascmd basename; then
-    usershell="$(basename $SHELL)"
+    usershell="$(basename "$SHELL")"
   fi
   info "Shell" "$usershell"
 }
