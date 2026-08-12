@@ -12,6 +12,8 @@ a minimal shell script that assumes the userspace is stupid
 
 - Git bash
 
+- Windows Recovery Environment(if you can locate and run `git bash`/`mingw64`)
+
 ## Installation : 
 
 Download the script
@@ -26,7 +28,7 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - A POSIX-compatible shell
 
-### Linux : 
+### Linux/Windows(git bash/mingw64) : 
 
 - nothing
 

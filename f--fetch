@@ -299,7 +299,8 @@ Linux | MINGW* | MSYS* | CYGWIN*)
 
   LoadAVG() {
     if [ -f /proc/loadavg ]; then
-      info "Load AVG" "$(cat /proc/loadavg)"
+      IFS= read -r Load </proc/loadavg
+      info "Load AVG" "$Load"
     else
       err "/proc/loadavg not found! Maybe there's no load."
     fi
