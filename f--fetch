@@ -587,7 +587,7 @@ Prin() {
 }
 
 Prin_no_endl() {
-  prinf '%s' "$*"
+  printf '%s' "$*"
 }
 
 # Capitalized modules are user-facing modules
