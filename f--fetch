@@ -565,7 +565,12 @@ Line_Break() {
 
 TTY() {
   if hascmd tty; then
-    info "TTY" "$(tty)"
+    tty >/dev/null 2>&1
+    if [ $? = 1 ]; then
+      err "Not a TTY..Did you launch commands using ssh or \`cat | sh\` ?"
+    else
+      info "TTY" "$(tty)"
+    fi
   else
     err "Command 'tty' not found!"
   fi
