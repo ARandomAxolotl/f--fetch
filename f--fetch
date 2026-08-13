@@ -613,7 +613,8 @@ main() {
   Break
   Colors
   # Colors sometimes doesn't show for some reason so you can disable it
-  # AkiyamaMizukiIsTuff
+  Break
+  AkiyamaMizukiIsTuff
 }
 
 fetch_info="$(main)"
