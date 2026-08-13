@@ -437,6 +437,16 @@ if hascmd wc; then
       fi
       printf 'dnf(%s)' "$(dnf list --installed | wc -l)"
     fi
+    
+    # This check is super tuff as i wrote this on the iphone 8 plus
+    if hascmd apk; then
+      if [ $pkg = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'apk(%s)' "$(apk list -I | wc -l)"
+    fi
 
     if hascmd flatpak; then
       if [ $pkg = 0 ]; then
