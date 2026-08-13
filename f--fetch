@@ -148,6 +148,7 @@ fi
 
 case "$OS" in
 Darwin)
+  err "DARWIN DETECTED......."
   Hostname() {
     info "$USER@$(sysctl -n kern.hostname)"
   }
