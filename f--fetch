@@ -24,9 +24,15 @@ BRIGHT_WHITE=$(printf '\033[97m')
 
 RESET=$(printf '\033[0m')
 
-err() {
-  printf '%s\n' "$RED$*$RESET" >&2
-}
+if [ "$1" = "--verbose" ]; then
+  err() {
+    printf '%s\n' "$RED$*$RESET" >&2
+  }
+else
+  err() {
+    :
+  }
+fi
 
 color() {
   printf '%s%s%s\n' "$1" "$2" "$RESET"
@@ -194,11 +200,23 @@ Darwin)
   ;;
 
 Linux | MINGW* | MSYS* | CYGWIN*)
+  if ! [ "$OS" = "Linux" ]; then
+    err "Windows DETECTED.."
+  fi
+
   Hostname() {
-    if hascmd hostname; then
-      printf '%s\n' "$GREEN$USER@$(hostname)$RESET"
+    if [ "x$USER" = "x" ]; then
+      printf '%s' "${RED}idk$RESET"
+      err '$USER might not exist in this environment....'
     else
-      printf '%s\n' "$RED$USER$RESET@${RED}idk$RESET"
+      printf '%s' "$GREEN$USER$RESET"
+    fi
+
+    if hascmd hostname; then
+      printf '%s\n' "${BLUE}@$GREEN$(hostname)$RESET"
+    else
+      printf '%s\n' "@${RED}idk$RESET"
+      err "What PC is this with no fucking hostname????"
     fi
   }
 
@@ -210,6 +228,8 @@ Linux | MINGW* | MSYS* | CYGWIN*)
             init=$(readlink -f /proc/1/exe)
             info "Init" "$(basename "$init")"
           }
+        else
+          err "No root for init detection :(. I'll guess systemd?"
         fi
       else
         err "Command 'basename' not found!"
@@ -295,6 +315,8 @@ Linux | MINGW* | MSYS* | CYGWIN*)
     else
       err "Command 'playerctl' not found! No music information :( "
     fi
+  else
+    err "$OS cannot get music information from Windows :(."
   fi
 
   LoadAVG() {
@@ -315,6 +337,8 @@ Shell() {
   usershell="$SHELL"
   if hascmd basename; then
     usershell="$(basename "$SHELL")"
+  else
+    err "Command 'basename' not found! Enjoy the full path."
   fi
   info "Shell" "$usershell"
 }
