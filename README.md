@@ -14,6 +14,8 @@
 
 - Windows Recovery Environment (if you can locate and run `git bash`/`mingw64`)
 
+- Archiso (`pacman -Sy git` first)
+
 ## Installation : 
 
 Download the script
