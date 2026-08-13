@@ -16,6 +16,8 @@
 
 - Archiso (`pacman -Sy git` first)
 
+- iSH on the same iPhone 8 plus
+
 ## Installation : 
 
 Download the script
