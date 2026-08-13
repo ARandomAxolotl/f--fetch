@@ -42,15 +42,19 @@ info() {
   printf '%-10s : %s\n' "$1" "$GREEN$2$RESET"
 }
 
+BOX="█████████████████████████████"
+
 logo=$(
-  color "$transBLUE" '          _    _                               __  __ _           _    _ '
-  color "$transPINK" '    /\   | |  (_)                             |  \/  (_)         | |  (_)'
-  color "$transPINK" '   /  \  | | ___ _   _  __ _ _ __ ___   __ _  | \  / |_ _____   _| | ___ '
-  color "$transWHITE" '  / /\ \ | |/ / | | | |/ _` | '\''_ ` _ \ / _` | | |\/| | |_  / | | | |/ / |'
-  color "$transWHITE" ' / ____ \|   <| | |_| | (_| | | | | | | (_| | | |  | | |/ /| |_| |   <| |'
-  color "$transPINK" '/_/    \_\_|\_\_|\__, |\__,_|_| |_| |_|\__,_| |_|  |_|_/___|\__,_|_|\_\_|'
-  color "$transPINK" '                  __/ |                                                  '
-  color "$transBLUE" '                 |___/                                                   '
+  color "$transBLUE" "$BOX"
+  color "$transBLUE" "$BOX"
+  color "$transPINK" "$BOX"
+  color "$transPINK" "$BOX"
+  color "$transWHITE" "$BOX"
+  color "$transWHITE" "$BOX"
+  color "$transPINK" "$BOX"
+  color "$transPINK" "$BOX"
+  color "$transBLUE" "$BOX"
+  color "$transBLUE" "$BOX"
 )
 
 if command >/dev/null 2>&1; then
@@ -65,7 +69,7 @@ else
 fi
 
 # Use this when the entire shit is done
-print_fetch() {
+ print_fetch() {
   info=$1
 
   exec 3<<EOF
@@ -76,12 +80,21 @@ EOF
     logo_line=
     info_line=
 
-    IFS= read -r logo_line <&0 || logo_done=1
-    IFS= read -r info_line <&3 || info_done=1
+    if IFS= read -r logo_line <&0; then
+      logo_done=0
+    else
+      logo_done=1
+    fi
 
-    [ -n "$logo_line" ] || [ -n "$info_line" ] || break
+    if IFS= read -r info_line <&3; then
+      info_done=0
+    else
+      info_done=1
+    fi
 
-    printf '%-73s %s\n' "$logo_line" "$info_line"
+    [ "$logo_done" = 1 ] && [ "$info_done" = 1 ] && break
+
+    printf '%-29s %s\n' "$logo_line" "$info_line"
 
     unset logo_done info_done
   done <<EOF
@@ -89,7 +102,7 @@ $logo
 EOF
 
   exec 3<&-
-}
+}  
 
 if hascmd uname; then
   OS=$(uname -s)
@@ -308,15 +321,16 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       Music() {
         title=$(playerctl metadata xesam:title)
         if [ "x$title" != "x" ]; then
-          printf '%-10s : %s(%s)\n%s' \
-            "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" "$RESET"
+          printf '%-10s : %s(%s) : %s\n' \
+            "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" \
+            "$(playerctl metadata mpris:length | awk '{ s = int($1 / 1000000); printf "%d:%02d\n", int(s / 60), s % 60 }')$RESET" 
         fi
       }
     else
       err "Command 'playerctl' not found! No music information :( "
     fi
   else
-    err "$OS cannot get music information from Windows :(."
+    err "Cannot get music information from Windows :(."
   fi
 
   LoadAVG() {
@@ -398,7 +412,9 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'pacman(%s)' "$(pacman -Q | wc -l)"
+      AURTotal=$(pacman -Qm | wc -l)
+      PacmanTotal=$(pacman -Q | wc -l)
+      printf 'pacman(Total : %s, System : %s, AUR : %s)' "$PacmanTotal" "$(( $PacmanTotal - $AURTotal ))" "$AURTotal" 
     fi
 
     if hascmd dnf5; then
@@ -425,7 +441,9 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'flatpak(%s)' "$(flatpak list | wc -l)"
+      flatpakapps=$(flatpak list --app | wc -l)
+      flatpaktotal=$(flatpak list | wc -l)
+      printf 'flatpak(Total : %s, Apps : %s, Runtime : %s)' "$flatpaktotal" "$flatpakapps" "$(( $flatpaktotal - $flatpakapps))"
     fi
 
     if hascmd winget; then
@@ -434,7 +452,7 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'winget(%s)' "$(($(winget list | wc -l) - 2))"
+      printf 'winget(%s)' "$(( $(winget list | wc -l) - 2))"
     fi
 
     if hascmd choco; then
@@ -443,7 +461,7 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'chocolatey(%s)' "$(($(choco list | wc -l) - 2))"
+      printf 'chocolatey(%s)' "$(( $(choco list | wc -l) - 2))"
     fi
 
     if hascmd scoop; then
@@ -452,7 +470,50 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'scoop(%s)' "$(scoop list | tail -n +5 | awk 'NF { count++ } END { print count+0 }')"
+      printf 'scoop(%s)' "$(( $(scoop list | wc -l) - 5))"
+    fi
+
+    if hascmd brew; then
+      if [ "$pkg" = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'brew(%s)' "$(brew list --formula | wc -l)"
+    fi
+
+    if hascmd snap; then
+      if [ "$pkg" = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'snap(%s)' "$(( $(snap list 2>/dev/null | wc -l) - 1 ))"
+    fi
+
+    # language-specific packages manager
+
+    if hascmd pipx; then
+      if [ "$pkg" = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'pipx(%s)' "$(pipx list --short | wc -l)"
+    fi
+
+    if hascmd pip; then
+      if [ "$pkg" = 0 ]; then
+        pkg=1
+      else
+        printf ', '
+      fi
+      printf 'pip('
+      if ! [ "x$VIRTUAL_ENV" = "x" ]; then
+        printf 'venv : %s, ' "$(pip list --format=freeze -l | wc -l)"
+      fi
+      PipPkg="$(pip list --format=freeze --user | wc -l)"
+      printf 'user : %s)' "$PipPkg"
     fi
 
     if [ $pkg = 0 ]; then
@@ -495,7 +556,7 @@ Colors() {
 }
 
 Break() {
-  printf '\n'
+  printf '\033[0m\n'
 }
 
 Line_Break() {
@@ -539,14 +600,15 @@ main() {
   CPU
   Uptime
   Packages
+  Break
   Music
-  LoadAVG
   Desktop
+  Break
   Colors
   # Colors sometimes doesn't show for some reason so you can disable it
   # AkiyamaMizukiIsTuff
 }
 
-fetch_info=$(main)
+fetch_info="$(main)"
 
 print_fetch "$fetch_info"
