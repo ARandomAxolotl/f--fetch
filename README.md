@@ -1,6 +1,6 @@
 # f--fetch
 
-a minimal shell script that assumes the userspace is stupid
+> a minimal shell script that assumes the userspace is stupid
 
 ## Tested environments : 
 
@@ -12,13 +12,13 @@ a minimal shell script that assumes the userspace is stupid
 
 - Git bash
 
-- Windows Recovery Environment(if you can locate and run `git bash`/`mingw64`)
+- Windows Recovery Environment (if you can locate and run `git bash`/`mingw64`)
 
 ## Installation : 
 
 Download the script
 
-Run it(`chmod +x` if required)
+Run it (`chmod +x` if required)
 
 Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
@@ -35,3 +35,19 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 ### Darwin (iOS/macOS) : 
 
 - sysctl must be in PATH
+
+### Optional :
+
+- uname, to distinguish kernels
+
+- awk, to parse /proc and other stuff
+
+- readlink, to distinguish init
+
+- basename, to pretty the shell name and help distinguish init
+
+- playerctl, to get music data
+
+- wc, to count packages
+
+- tty, to print tty information
