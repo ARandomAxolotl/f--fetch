@@ -210,6 +210,8 @@ Darwin)
     err "What kind of apple produc is this that have to awk?"
   fi
 
+  err "Darwin doesn't expose music metadata :("
+
   ;;
 
 Linux | MINGW* | MSYS* | CYGWIN*)
