@@ -69,7 +69,7 @@ else
 fi
 
 # Use this when the entire shit is done
- print_fetch() {
+print_fetch() {
   info=$1
 
   exec 3<<EOF
@@ -102,7 +102,7 @@ $logo
 EOF
 
   exec 3<&-
-}  
+}
 
 if hascmd uname; then
   OS=$(uname -s)
@@ -326,7 +326,7 @@ Linux | MINGW* | MSYS* | CYGWIN*)
         if [ "x$title" != "x" ]; then
           printf '%-10s : %s(%s) : %s\n' \
             "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" \
-            "$(playerctl metadata mpris:length | awk '{ s = int($1 / 1000000); printf "%d:%02d\n", int(s / 60), s % 60 }')$RESET" 
+            "$(playerctl metadata mpris:length | awk '{ s = int($1 / 1000000); printf "%d:%02d\n", int(s / 60), s % 60 }')$RESET"
         fi
       }
     else
@@ -417,7 +417,7 @@ if hascmd wc; then
       fi
       AURTotal=$(pacman -Qm | wc -l)
       PacmanTotal=$(pacman -Q | wc -l)
-      printf 'pacman(Total : %s, System : %s, AUR : %s)' "$PacmanTotal" "$(( $PacmanTotal - $AURTotal ))" "$AURTotal" 
+      printf 'pacman(Total : %s, System : %s, AUR : %s)' "$PacmanTotal" "$(($PacmanTotal - $AURTotal))" "$AURTotal"
     fi
 
     if hascmd dnf5; then
@@ -437,7 +437,7 @@ if hascmd wc; then
       fi
       printf 'dnf(%s)' "$(dnf list --installed | wc -l)"
     fi
-    
+
     # This check is super tuff as i wrote this on the iphone 8 plus
     if hascmd apk; then
       if [ $pkg = 0 ]; then
@@ -456,7 +456,7 @@ if hascmd wc; then
       fi
       flatpakapps=$(flatpak list --app | wc -l)
       flatpaktotal=$(flatpak list | wc -l)
-      printf 'flatpak(Total : %s, Apps : %s, Runtime : %s)' "$flatpaktotal" "$flatpakapps" "$(( $flatpaktotal - $flatpakapps))"
+      printf 'flatpak(Total : %s, Apps : %s, Runtime : %s)' "$flatpaktotal" "$flatpakapps" "$(($flatpaktotal - $flatpakapps))"
     fi
 
     if hascmd winget; then
@@ -465,7 +465,7 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'winget(%s)' "$(( $(winget list | wc -l) - 2))"
+      printf 'winget(%s)' "$(($(winget list | wc -l) - 2))"
     fi
 
     if hascmd choco; then
@@ -474,7 +474,7 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'chocolatey(%s)' "$(( $(choco list | wc -l) - 2))"
+      printf 'chocolatey(%s)' "$(($(choco list | wc -l) - 2))"
     fi
 
     if hascmd scoop; then
@@ -483,7 +483,7 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'scoop(%s)' "$(( $(scoop list | wc -l) - 5))"
+      printf 'scoop(%s)' "$(($(scoop list | wc -l) - 5))"
     fi
 
     if hascmd brew; then
@@ -501,7 +501,7 @@ if hascmd wc; then
       else
         printf ', '
       fi
-      printf 'snap(%s)' "$(( $(snap list 2>/dev/null | wc -l) - 1 ))"
+      printf 'snap(%s)' "$(($(snap list 2>/dev/null | wc -l) - 1))"
     fi
 
     # language-specific packages manager
@@ -522,10 +522,12 @@ if hascmd wc; then
         printf ', '
       fi
       printf 'pip('
+      PipVenvPkg=0
       if ! [ "x$VIRTUAL_ENV" = "x" ]; then
-        printf 'venv : %s, ' "$(pip list --format=freeze -l | wc -l)"
+        PipVenvPkg=$(pip list --format=freeze -l | wc -l)
+        printf 'venv : %s, ' "$PipVenvPkg"
       fi
-      PipPkg="$(pip list --format=freeze --user | wc -l)"
+      PipPkg="$(($(pip list --format=freeze | wc -l) - $PipVenvPkg))"
       printf 'user : %s)' "$PipPkg"
     fi
 
@@ -578,8 +580,7 @@ Line_Break() {
 
 TTY() {
   if hascmd tty; then
-    tty >/dev/null 2>&1
-    if [ $? = 1 ]; then
+    if tty >/dev/null 2>&1; then
       err "Not a TTY..Did you launch commands using ssh or \`cat | sh\` ?"
     else
       info "TTY" "$(tty)"
