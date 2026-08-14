@@ -289,7 +289,7 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       init="$(awk '/^Name:/ {print $2; exit}' /proc/1/status)"
       if [ "x$init" = "x" ]; then
         init="$BOLD${RED}lol no"
-        err "Init so ${BOLD}UNTUFF${RESET}{$RED} it hides itself."
+        err "Init so ${BOLD}UNTUFF${RESET}${RED} it hides itself."
       fi
       info "Init" "$init"
     }
