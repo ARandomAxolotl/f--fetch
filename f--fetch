@@ -648,7 +648,7 @@ TTY() {
 }
 
 AkiyamaMizukiIsTuff() {
-  printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} $UNDERLINE${BOLD}tuff$RESET"
+  printf '%s\n' "$UNDERLINE${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki${RESET} is${transBLUE} $UNDERLINE${BOLD}tuff$RESET"
 }
 
 Prin() {
@@ -708,6 +708,13 @@ TimeDate(){
   fi
 }
 
+NightcordMembers(){
+  set -- "Akiyama Mizuki" "Shinonome Ena" "Asahina Mafuyu" "Yoisaki Kanade"
+  NightcordMember=$(( $(od -An -N4 -tu4 /dev/urandom) % $# + 1 ))
+
+  eval "printf '%s\n' \"$UNDERLINE$MAGENTA\${$NightcordMember}$RESET\""
+}
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
 
@@ -736,6 +743,9 @@ main() {
   Colors
   Break
   AkiyamaMizukiIsTuff
+  Break
+  NightcordMembers
+  # This module is just for fun.
 }
 
 fetch_info="$(main)"
