@@ -55,3 +55,59 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 - wc, to count packages
 
 - tty, to print tty information
+
+## Customization : 
+
+### Modules list : 
+
+- Hostname
+
+- OS
+
+- Init
+
+- Shell
+
+- Pwd
+
+- Terminal
+
+- TTY
+
+- Kernel
+
+- Memory
+
+- CPU
+
+- Uptime
+
+- Packages
+
+- TimeDate
+
+- Music
+
+- Desktop
+
+- Editor
+
+- Visual
+
+### Decoration modules list : 
+
+- Line_break
+
+- Break
+
+- Prin
+
+- Prin_no_endl
+
+- Colors
+
+<!-- Hidden modules -->
+
+<!-- AkiyamaMizukiIsTuff -->
+
+<!-- NightcordMembers -->
