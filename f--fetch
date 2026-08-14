@@ -153,7 +153,7 @@ case "$OS" in
 Darwin)
   err "${UNDERLINE}DARWIN$RESET${RED} DETECTED......."
   Hostname() {
-    info "$USER@$(sysctl -n kern.hostname)"
+    printf '%s\n' "$GREEN$USER$RESET@$BLUE$(sysctl -n kern.hostname)$RESET"
   }
 
   Init() {
