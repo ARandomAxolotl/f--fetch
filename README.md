@@ -58,6 +58,8 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 ## Customization : 
 
+Edit the main() function in the script
+
 ### Modules list : 
 
 - Hostname
