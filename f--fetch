@@ -23,6 +23,7 @@ BRIGHT_CYAN=$(printf '\033[96m')
 BRIGHT_WHITE=$(printf '\033[97m')
 
 BOLD=$(printf '\033[1m')
+UNDERLINE=$(printf '\033[4m')
 
 RESET=$(printf '\033[0m')
 
@@ -64,7 +65,7 @@ if command >/dev/null 2>&1; then
     command -v "$1" >/dev/null 2>&1
   }
 else
-  err "Command 'command' not found! Falling back to 'type'."
+  err "Command '${UNDERLINE}command$RESET${RED}' not found! Falling back to 'type'."
   hascmd() {
     type "$1" >/dev/null 2>&1
   }
@@ -110,7 +111,7 @@ if hascmd uname; then
   OS=$(uname -s)
 else
   OS=Linux
-  err "Command 'uname' not found! Defaulting to Linux."
+  err "Command '${UNDERLINE}uname$RESET${RED}' not found! Defaulting to Linux."
 fi
 
 Init() {
@@ -143,25 +144,25 @@ OS() {
 
 if [ "$OS" = "Darwin" ]; then
   if ! hascmd sysctl; then
-    err "Command 'sysctl' not found! Aborting fetch."
+    err "Command '${UNDERLINE}sysctl$RESET${RED}' not found! Aborting fetch."
     exit 1
   fi
 fi
 
 case "$OS" in
 Darwin)
-  err "DARWIN DETECTED......."
+  err "${UNDERLINE}DARWIN$RESET${RED} DETECTED......."
   Hostname() {
     info "$USER@$(sysctl -n kern.hostname)"
   }
 
   Init() {
-    info "Init" "launchd"
+    info "Init" "${YELLOW}launchd"
 
   }
 
   Desktop() {
-    info "Desktop" "Springboard"
+    info "Desktop" "${YELLOW}Springboard"
   }
 
   OS() {
@@ -209,16 +210,16 @@ Darwin)
     }
 
   else
-    err "What kind of apple produc is this that have to awk?"
+    err "What kind of apple produc is this that have ${UNDERLINE}no awk$RESET${RED}?"
   fi
 
-  err "Darwin doesn't expose music metadata :("
+  err "Darwin ${UNDERLINE}doesn't expose music metadata$RESET ${BLACK}:${RED}("
 
   ;;
 
 Linux | MINGW* | MSYS* | CYGWIN*)
   if ! [ "$OS" = "Linux" ]; then
-    err "Windows DETECTED.."
+    err "${UNDERLINE}Windows$RESET${RED} DETECTED.."
   fi
 
   Hostname() {
@@ -247,11 +248,11 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       OS() {
         :
       }
-      err "/etc/os-release not found! Bro have no identity like Mafuyu."
+      err "${UNDERLINE}/etc/os-release$RESET${RED} not found! Bro have no identity like Mafuyu."
     fi
   else
     OS() {
-      info "OS" "Windows"
+      info "OS" "${YELLOW}Windows"
     }
   fi
 
@@ -285,17 +286,23 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       info "Uptime" "$(awk '{printf "%d days, %02d:%02d:%02d\n", $1/86400, $1/3600%24, $1/60%60, $1%60}' /proc/uptime)"
     }
 
-    Init() {
-      init="$(awk '/^Name:/ {print $2; exit}' /proc/1/status)"
-      if [ "x$init" = "x" ]; then
-        init="$BOLD${RED}lol no"
-        err "Init so ${BOLD}UNTUFF${RESET}${RED} it hides itself."
-      fi
-      info "Init" "$init"
-    }
+    if [ "$OS" = "Linux" ]; then
+      Init() {
+        init="$(awk '/^Name:/ {print $2; exit}' /proc/1/status)"
+        if [ "x$init" = "x" ]; then
+          init="$BOLD${RED}lol no"
+          err "Init so ${BOLD}${UNDERLINE}UNTUFF${RESET}${RED} it hides itself."
+        fi
+        info "Init" "$init"
+      }
+    else
+      Init() {
+        info "Init" "${YELLOW}wininit.exe"
+      }
+    fi
 
   else
-    err "WHAT THE FUCK THERE'S NO awk???"
+    err "WHAT THE FUCK THERE'S ${UNDERLINE}NO awk$RESET${RED}???"
   fi
 
   if [ "$OS" = "Linux" ]; then
@@ -303,12 +310,12 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       if [ "x$DESKTOP_SESSION" != "x" ]; then
         info "Desktop" "$DESKTOP_SESSION"
       else
-        err "Are you running in the tty?"
+        err "Are you running in the ${UNDERLINE}tty$RESET${RED}?"
       fi
     }
   else
     Desktop() {
-      info "Desktop" "explorer.exe"
+      info "Desktop" "${YELLOW}explorer.exe"
     }
   fi
 
@@ -323,10 +330,10 @@ Linux | MINGW* | MSYS* | CYGWIN*)
         fi
       }
     else
-      err "Command 'playerctl' not found! No music information :( "
+      err "Command '${UNDERLINE}playerctl$RESET${RED}' not found! No music information :( "
     fi
   else
-    err "Cannot get music information from Windows :(."
+    err "Cannot get music information from ${UNDERLINE}Windows$RESET${RED} :(."
   fi
 
   LoadAVG() {
@@ -334,12 +341,12 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       IFS= read -r Load </proc/loadavg
       info "Load AVG" "$Load"
     else
-      err "/proc/loadavg not found! Maybe there's no load."
+      err "${UNDERLINE}/proc/loadavg$RESET$RED not found! Maybe there's no load."
     fi
   }
   ;;
 *)
-  err "idk what OS is $BOLD$OS"
+  err "idk what OS is $UNDERLINE$BOLD$OS"
   ;;
 esac
 
@@ -348,7 +355,7 @@ Shell() {
   if hascmd basename; then
     usershell="$(basename "$SHELL")"
   else
-    err "Command 'basename' not found! Enjoy the full path."
+    err "Command '${UNDERLINE}basename$RESET${RED}' not found! Enjoy the full path."
   fi
   info "Shell" "$usershell"
 }
@@ -370,13 +377,13 @@ if hascmd uname; then
 else
   case "$OS" in
   Linux)
-    err "Comamnd 'uname' not found! Using the good old /proc."
+    err "Comamnd '${UNDERLINE}uname$RESET${RED}' not found! Using the good old /proc."
     Kernel() {
       info "Kernel" "$(cat /proc/version)"
     }
     ;;
   Darwin)
-    err "Comamnd 'uname' not found! Using the good old sysctl."
+    err "Comamnd '${UNDERLINE}uname$RESET${RED}' not found! Using the good old sysctl."
     Kernel() {
       info "Kernel" "$(sysctl -n kern.version)"
     }
@@ -525,14 +532,14 @@ if hascmd wc; then
     fi
 
     if [ $pkg = 0 ]; then
-      err "No known packages manager found!"
+      err "No known ${UNDERLINE}packages manager$RESET${RED} found!"
       printf '%s' "$BOLD${RED}no"
     fi
 
     printf '%s\n' "$RESET"
   }
 else
-  err "Command 'wc' not found!"
+  err "Command '${UNDERLINE}wc$RESET${RED}' not found!"
 fi
 
 Language() {
@@ -574,17 +581,17 @@ Line_Break() {
 TTY() {
   if hascmd tty; then
     if tty >/dev/null 2>&1; then
-      err "Not a TTY..Did you launch commands using ssh or \`cat | sh\` ?"
+      err "${UNDERLINE}Not a TTY$RESET${RED}..Did you launch commands using ssh or \`cat | sh\` ?"
     else
       info "TTY" "$(tty)"
     fi
   else
-    err "Command 'tty' not found!"
+    err "Command '${UNDERLINE}tty$RESET${RED}' not found!"
   fi
 }
 
 AkiyamaMizukiIsTuff() {
-  printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} ${BOLD}tuff$RESET"
+  printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} $UNDERLINE${BOLD}tuff$RESET"
 }
 
 Prin() {
