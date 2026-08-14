@@ -224,8 +224,13 @@ Linux | MINGW* | MSYS* | CYGWIN*)
 
   Hostname() {
     if [ "x$USER" = "x" ]; then
-      printf '%s' "$BOLD${RED}idk$RESET"
-      err '$USER might not exist in this environment....'
+      err "${UNDERLINE}\$USER$RESET${RED} might not exist in this environment....Trying \$USERNAME"
+      if [ "x$USERNAME" = "x" ]; then
+        printf '%s' "$BOLD${RED}idk$RESET"
+        err "${UNDERLINE}\$USERNAME$RESET${RED} might not exist in this environment......"
+      else
+        printf '%s' "$GREEN$USERNAME$RESET"
+      fi
     else
       printf '%s' "$GREEN$USER$RESET"
     fi
@@ -361,7 +366,9 @@ Shell() {
 }
 
 Terminal() {
-  info "Terminal" "$TERM"
+  if ! [ "x$TERM" = "x" ]; then
+    info "Terminal" "$TERM"
+  fi
 }
 
 if hascmd uname; then
@@ -377,13 +384,13 @@ if hascmd uname; then
 else
   case "$OS" in
   Linux)
-    err "Comamnd '${UNDERLINE}uname$RESET${RED}' not found! Using the good old /proc."
+    err "Command '${UNDERLINE}uname$RESET${RED}' not found! Using the good old /proc."
     Kernel() {
       info "Kernel" "$(cat /proc/version)"
     }
     ;;
   Darwin)
-    err "Comamnd '${UNDERLINE}uname$RESET${RED}' not found! Using the good old sysctl."
+    err "Command '${UNDERLINE}uname$RESET${RED}' not found! Using the good old sysctl."
     Kernel() {
       info "Kernel" "$(sysctl -n kern.version)"
     }
@@ -602,6 +609,32 @@ Prin_no_endl() {
   printf '%s' "$*"
 }
 
+Editor(){
+  if ! [ "x$EDITOR" = "x" ]; then
+    if [ "$EDITOR" = "nvim" ]; then
+      edit=neovim
+    else
+      edit="$EDITOR"
+    fi
+    info "Editor" "$edit"
+  fi
+}
+
+Visual(){
+  if ! [ "x$VISUAL" = "x" ]; then
+    if [ "$VISUAL" = "nvim" ]; then
+      vis=neovim
+    else
+      vis="$VISUAL"
+    fi
+    info "Visual" "$vis"
+  fi
+}
+
+Pwd(){
+  info "PWD" "${PWD/#$HOME/\~}"
+}
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
 
@@ -611,6 +644,7 @@ main() {
   OS
   Init
   Shell
+  Pwd
   Terminal
   TTY
   Break
@@ -622,6 +656,8 @@ main() {
   Break
   Music
   Desktop
+  Editor
+  Visual
   Break
   Colors
   # Colors sometimes doesn't show for some reason so you can disable it
