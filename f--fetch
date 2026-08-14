@@ -324,6 +324,10 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       if [ "x$CPU" = "x" ]; then
         CPU="$(awk -F: '/^system type/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
       fi
+      
+      if [ "x$CPU" = "x" ]; then
+        CPU="$(awk -F: '/^vendor_id/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo) CPU"
+      fi
 
       if [ "x$CPU" = "x" ]; then
         CPU="$BOLD${RED}idk"
