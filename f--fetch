@@ -22,6 +22,8 @@ BRIGHT_MAGENTA=$(printf '\033[95m')
 BRIGHT_CYAN=$(printf '\033[96m')
 BRIGHT_WHITE=$(printf '\033[97m')
 
+BOLD=$(printf '\033[1m')
+
 RESET=$(printf '\033[0m')
 
 if [ "$1" = "--verbose" ]; then
@@ -185,8 +187,7 @@ Darwin)
 
   CPU() {
     CPU="$(sysctl -n machdep.cpu.brand_string)"
-    Cores="$(sysctl -n machdep.cpu.core_count)"
-    info "CPU" "$CPU (${Cores} cores, $(sysctl -n hw.perflevel0.physicalcpu)P + $(sysctl -n hw.perflevel1.physicalcpu)E)"
+    info "CPU" "$CPU"
   }
 
   if hascmd awk; then
@@ -222,7 +223,7 @@ Linux | MINGW* | MSYS* | CYGWIN*)
 
   Hostname() {
     if [ "x$USER" = "x" ]; then
-      printf '%s' "${RED}idk$RESET"
+      printf '%s' "$BOLD${RED}idk$RESET"
       err '$USER might not exist in this environment....'
     else
       printf '%s' "$GREEN$USER$RESET"
@@ -231,33 +232,10 @@ Linux | MINGW* | MSYS* | CYGWIN*)
     if hascmd hostname; then
       printf '%s\n' "${BLUE}@$GREEN$(hostname)$RESET"
     else
-      printf '%s\n' "@${RED}idk$RESET"
+      printf '%s\n' "@$BOLD${RED}idk$RESET"
       err "What PC is this with no fucking hostname????"
     fi
   }
-
-  if [ "$OS" = "Linux" ]; then
-    if hascmd readlink; then
-      if hascmd basename; then
-        if [ "$USER" = "root" ]; then
-          Init() {
-            init=$(readlink -f /proc/1/exe)
-            info "Init" "$(basename "$init")"
-          }
-        else
-          err "No root for init detection :(. I'll guess systemd?"
-        fi
-      else
-        err "Command 'basename' not found!"
-      fi
-    else
-      err "Command 'readlink' not found!"
-    fi
-  else
-    Init() {
-      info "Init" "wininit.exe"
-    }
-  fi
 
   if [ "$OS" = "Linux" ]; then
     if [ -f /etc/os-release ]; then
@@ -290,15 +268,30 @@ Linux | MINGW* | MSYS* | CYGWIN*)
 
     CPU() {
       CPU="$(awk -F: '/^model name/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
+
       if [ "x$CPU" = "x" ]; then
-        CPU=idk
+        CPU="$(awk -F: '/^system type/ {gsub(/^[ \t]+/, "", $2); print $2; exit}' /proc/cpuinfo)"
+      fi
+
+      if [ "x$CPU" = "x" ]; then
+        CPU="$BOLD${RED}idk"
         err 'No idea what the hell is the cpu.'
       fi
+
       info "CPU" "$CPU"
     }
 
     Uptime() {
       info "Uptime" "$(awk '{printf "%d days, %02d:%02d:%02d\n", $1/86400, $1/3600%24, $1/60%60, $1%60}' /proc/uptime)"
+    }
+
+    Init() {
+      init="$(awk '/^Name:/ {print $2; exit}' /proc/1/status)"
+      if [ "x$init" = "x" ]; then
+        init="$BOLD${RED}lol no"
+        err "Init so ${BOLD}UNTUFF${RESET}{$RED} it hides itself."
+      fi
+      info "Init" "$init"
     }
 
   else
@@ -346,7 +339,7 @@ Linux | MINGW* | MSYS* | CYGWIN*)
   }
   ;;
 *)
-  err "idk what OS is $OS"
+  err "idk what OS is $BOLD$OS"
   ;;
 esac
 
@@ -533,7 +526,7 @@ if hascmd wc; then
 
     if [ $pkg = 0 ]; then
       err "No known packages manager found!"
-      printf '%s' "no"
+      printf '%s' "$BOLD${RED}no"
     fi
 
     printf '%s\n' "$RESET"
@@ -591,7 +584,7 @@ TTY() {
 }
 
 AkiyamaMizukiIsTuff() {
-  printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} tuff$RESET"
+  printf '%s\n' "${transBLUE}Aki${transPINK}yama${transWHITE} Mizu${transPINK}ki is${transBLUE} ${BOLD}tuff$RESET"
 }
 
 Prin() {
