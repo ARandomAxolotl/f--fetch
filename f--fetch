@@ -632,7 +632,11 @@ Visual(){
 }
 
 Pwd(){
-  info "PWD" "${PWD/#$HOME/\~}"
+  if ! [ "x$HOME" = "x" ]; then
+    info "PWD" "${PWD/#$HOME/\~}"
+  else
+    info "PWD" "$PWD"
+  fi
 }
 
 # Capitalized modules are user-facing modules
