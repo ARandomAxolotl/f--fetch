@@ -2,6 +2,16 @@
 
 > a minimal shell script that assumes the userspace is stupid
 
+## Supported environments :
+
+- Linux
+
+- Darwin (macOS/iOS)
+
+- Windows (Git Bash/MSYS/Cygwin)
+
+- probably your toaster
+
 ## Tested environments : 
 
 - Arch Linux
