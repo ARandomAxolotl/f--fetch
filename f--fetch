@@ -580,7 +580,7 @@ Line_Break() {
 
 TTY() {
   if hascmd tty; then
-    if tty >/dev/null 2>&1; then
+    if ! tty >/dev/null 2>&1; then
       err "${UNDERLINE}Not a TTY$RESET${RED}..Did you launch commands using ssh or \`cat | sh\` ?"
     else
       info "TTY" "$(tty)"
