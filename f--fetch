@@ -631,11 +631,20 @@ Visual(){
   fi
 }
 
-Pwd(){
-  if ! [ "x$HOME" = "x" ]; then
-    info "PWD" "${PWD/#$HOME/\~}"
-  else
-    info "PWD" "$PWD"
+Pwd() {
+  if [ "x$HOME" != "x" ] && [ "x$PWD" != "x" ]; then
+    case "$PWD" in
+      "$HOME")
+        pwd='~'
+        ;;
+      "$HOME"/*)
+        pwd="~/${PWD#"$HOME"/}"
+        ;;
+      *)
+        pwd="$PWD"
+        ;;
+    esac
+    info "PWD" "$pwd"
   fi
 }
 
