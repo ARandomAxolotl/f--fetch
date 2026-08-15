@@ -746,7 +746,7 @@ TimeDate(){
 
 NightcordMembers(){
   set -- "Akiyama Mizuki" "Shinonome Ena" "Asahina Mafuyu" "Yoisaki Kanade"
-  NightcordMember=$(( $(od -An -N4 -tu4 /dev/urandom) % $# + 1 ))
+  NightcordMember=$(( $(od -An -N4 -tu4 /dev/random) % $# + 1 ))
 
   case "$NightcordMember" in
     1) member="Akiyama Mizuki" ;;
@@ -787,10 +787,10 @@ main() {
   Visual
   Break
   Colors
-  # Break
-  # AkiyamaMizukiIsTuff
-  # Break
-  # NightcordMembers
+  Break
+  AkiyamaMizukiIsTuff
+  Break
+  NightcordMembers
   # This module is just for fun.
 }
 
