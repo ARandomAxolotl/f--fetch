@@ -28,6 +28,8 @@
 
 - iSH on the same iPhone 8 plus
 
+- Android (BlissOS x86) with termux
+
 ## Installation : 
 
 Download the script
@@ -42,7 +44,7 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - A POSIX-compatible shell
 
-### Linux/Windows(git bash/mingw64) : 
+### Linux/Windows(git bash/mingw64)/Android : 
 
 - nothing
 
@@ -56,15 +58,19 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - awk, to parse /proc and other stuff
 
-- readlink, to distinguish init
-
-- basename, to pretty the shell name and help distinguish init
+- basename, to pretty the shell name
 
 - playerctl, to get music data
 
 - wc, to count packages
 
 - tty, to print tty information
+
+## Usage : 
+
+./f--fetch : print the pretty fetch
+
+./f--fetch --verbose : print the fetch with logs and errors
 
 ## Customization : 
 
