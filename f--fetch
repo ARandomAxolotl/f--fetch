@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# settings
+# Settings
+# Change these depends on your system
+
+LogoLongestLine=45
+# Logo width
+
+LogoFromArtwork=1
+# Bool to get logo from music artwork
+# 1 to enable, anything else to disable artwork logos
+
 transBLUE=$(printf '\033[38;2;91;206;250m')
 transPINK=$(printf '\033[38;2;245;169;184m')
 transWHITE=$(printf '\033[38;2;255;255;255m')
@@ -55,7 +66,20 @@ info() {
   printf '%-10s : %s\n' "$1" "$GREEN$2$RESET"
 }
 
-BOX="█████████████████████████████"
+
+BOX=
+i=0
+while [ "$i" -lt "$LogoLongestLine" ]; do
+  BOX="${BOX}█"
+  i=$((i + 1))
+done
+
+SPACEs=
+i=0
+while [ "$i" -lt "$LogoLongestLine" ]; do
+  SPACEs="${SPACEs} "
+  i=$((i + 1))
+done
 
 logo=$(
   color "$transBLUE" "$BOX"
@@ -69,8 +93,6 @@ logo=$(
   color "$transBLUE" "$BOX"
   color "$transBLUE" "$BOX"
 )
-
-
 
 if command >/dev/null 2>&1; then
   hascmd() {
@@ -125,7 +147,7 @@ EOF
 
     [ "$logo_done" = 1 ] && [ "$info_done" = 1 ] && break
 
-    printf '%-29s %s\n' "$logo_line" "$info_line"
+    printf "%-*s %s\n" "$LogoLongestLine" "$logo_line" "$info_line"
 
     unset logo_done info_done
   done <<EOF
@@ -385,18 +407,32 @@ Linux | MINGW* | MSYS* | CYGWIN*)
 
   if [ "$OS" = "Linux" ]; then
     if hascmd playerctl; then
+      title=$(playerctl metadata xesam:title)
+      if [ "x$title" != "x" ]; then
       log "playerctl exists!!!!!!! :)"
-      Music() {
-        title=$(playerctl metadata xesam:title)
-        if [ "x$title" != "x" ]; then
+        Music() {
           log "THERE IS MUSIC!!!"
           printf '%-10s : %s(%s) : %s\n' \
             "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" \
             "$(playerctl metadata mpris:length | awk '{ s = int($1 / 1000000); printf "%d:%02d\n", int(s / 60), s % 60 }')$RESET"
-        else
-          log "Not playing anything :(. Music suggest : Bakenohana(Nightcord at 25.)"
+        }
+        if [ "$LogoFromArtwork" = 1 ]; then
+          if hascmd curl; then
+            if hascmd chafa; then
+              log "Getting arkwork..."
+              arkwrok="$(curl -s "$(playerctl metadata mpris:artUrl)" | chafa --format symbols -s "$LogoLongestLine")"
+              arkwrok="$arkwrok$SPACEs"
+              logo="$arkwrok"
+            else
+              err "no ${UNDERLINE}chafa$RESET${RED} :( cannot show artwork"
+            fi
+          else
+            err "No ${UNDERLINE}curl$RESET${RED} :( no arkwrok data"
+          fi
         fi
-      }
+      else
+        log "Not playing anything :(. Music suggest : Bakenohana(Nightcord at 25.)"
+      fi
     else
       err "Command '${UNDERLINE}playerctl$RESET${RED}' not found! No music information :( "
     fi
@@ -761,6 +797,17 @@ NightcordMembers(){
 
 }
 
+TransFlag(){
+  for _ in 1 2;do
+    printf '%s███%s' "$transBLUE" "$RESET"
+    printf '%s███%s' "$transPINK" "$RESET"
+    printf '%s██████%s' "$transWHITE" "$RESET"
+    printf '%s███%s' "$transBLUE" "$RESET"
+    printf '%s███%s' "$transPINK" "$RESET"
+    printf '\n'
+  done
+}
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
 
@@ -792,6 +839,8 @@ main() {
   # Break
   # NightcordMembers
   # This module is just for fun.
+  # TransFlag
+  # Mizuki so tuff TransFlag module exists
 }
 
 fetch_info="$(main)"

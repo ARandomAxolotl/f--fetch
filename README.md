@@ -124,8 +124,20 @@ Edit the main() function in the script
 
 - Colors
 
+### Logo customization
+
+`LogoLongestLine=x`
+
+Sets the logo width.
+
+`LogoFromArtwork=1|0`
+
+Enables or disables using music artwork as the logo.
+
 <!-- Hidden modules -->
 
 <!-- AkiyamaMizukiIsTuff -->
 
 <!-- NightcordMembers -->
+
+<!-- TransFlag -->
