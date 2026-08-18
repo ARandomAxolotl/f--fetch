@@ -66,6 +66,8 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - tty, to print tty information
 
+- od, to get 32 bytes from /dev/random
+
 ## Usage : 
 
 ./f--fetch : print the pretty fetch

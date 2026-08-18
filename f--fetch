@@ -781,15 +781,20 @@ TimeDate(){
 }
 
 NightcordMembers(){
-  set -- "Akiyama Mizuki" "Shinonome Ena" "Asahina Mafuyu" "Yoisaki Kanade"
-  NightcordMember=$(( $(od -An -N4 -tu4 /dev/random) % $# + 1 ))
+  if hascmd od; then
+    set -- "Akiyama Mizuki" "Shinonome Ena" "Asahina Mafuyu" "Yoisaki Kanade"
+    NightcordMember=$(( $(od -An -N4 -tu4 /dev/random) % $# + 1 ))
 
-  case "$NightcordMember" in
-    1) member="Akiyama Mizuki" ;;
-    2) member="Shinonome Ena" ;;
-    3) member="Asahina Mafuyu" ;;
-    4) member="Yoisaki Kanade" ;;
-  esac
+    case "$NightcordMember" in
+      1) member="Akiyama Mizuki" ;;
+      2) member="Shinonome Ena" ;;
+      3) member="Asahina Mafuyu" ;;
+      4) member="Yoisaki Kanade" ;;
+    esac
+  else
+    err "Command 'od' not found! Defaulting to Mizuki."
+    member="Akiyama Mizuki"
+  fi
 
   log "Got : $member"
 
