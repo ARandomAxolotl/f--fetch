@@ -311,7 +311,8 @@ Linux | MINGW* | MSYS* | CYGWIN*)
     if [ -f /etc/os-release ]; then
       OS() {
         . /etc/os-release
-        info "OS" "$PRETTY_NAME"
+        ANSI_COLOR="$(printf '\033[%sm' "$ANSI_COLOR")"
+        info "OS" "$ANSI_COLOR$PRETTY_NAME"
         log "Got \$PRETTY_NAME : $PRETTY_NAME"
       }
     else
@@ -412,8 +413,12 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       log "playerctl exists!!!!!!! :)"
         Music() {
           log "THERE IS MUSIC!!!"
-          printf '%-10s : %s(%s) : %s\n' \
-            "Music" "$GREEN$title" "$(playerctl metadata xesam:artist)" \
+          Artist=$(playerctl metadata xesam:artist)
+          if ! [ "Mizuki$Artist" = "Mizuki" ]; then
+            Artist="($Artist)"
+          fi
+          printf '%-10s : %s%s : %s\n' \
+            "Music" "$GREEN$title" "$Artist" \
             "$(playerctl metadata mpris:length | awk '{ s = int($1 / 1000000); printf "%d:%02d\n", int(s / 60), s % 60 }')$RESET"
         }
         if [ "$LogoFromArtwork" = 1 ]; then
@@ -813,9 +818,41 @@ TransFlag(){
   done
 }
 
+GPU() {
+    if hascmd lspci; then
+      if hascmd sed; then
+        lspci | grep -Ei 'vga|3d|display' | sed 's/.*: //' |
+          while IFS= read -r gpu; do
+              info "GPU" "$gpu"
+          done
+      else
+        err "sed not found..cannot parse lspci output :("
+      fi
+    else
+        err "Command '${UNDERLINE}lspci$RESET${RED}' not found! No GPU information :("
+    fi
+}
+
+Host(){
+  case "$OS" in
+    Darwin)
+      if [ -x appledetector ]; then
+        info "Host" "$(appledetector)"
+      fi
+      ;;
+    Linux)
+      info "Host" "A random linux computer."
+      ;;
+    MINGW* | MSYS* | CYGWIN*)
+      info "Host" "A random Windows computer."
+      ;;
+    *)
+      :
+  esac
+}
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
-
 main() {
   Hostname
   Line_Break
@@ -829,6 +866,8 @@ main() {
   Kernel
   Memory
   CPU
+  GPU
+  Host
   Uptime
   Packages
   TimeDate
