@@ -816,13 +816,13 @@ TransFlag(){
 
 GPU() {
     if hascmd lspci; then
-      if hascmd sed; then
+      if hascmd sed && hascmd grep; then
         lspci | grep -Ei 'vga|3d|display' | sed 's/.*: //' |
           while IFS= read -r gpu; do
               info "GPU" "$gpu"
           done
       else
-        err "sed not found..cannot parse lspci output :("
+        err "${UNDERLINE}sed and grep$RESET${RED} not found..cannot parse lspci output :("
       fi
     else
         err "Command '${UNDERLINE}lspci$RESET${RED}' not found! No GPU information :("
@@ -845,6 +845,25 @@ Host(){
     *)
       :
   esac
+}
+
+CheeseCakeFight(){
+    if hascmd od; then
+    set -- "Shinonome Ena" "Shinonome Akito"
+    CheeseCake=$(( $(od -An -N4 -tu4 /dev/random) % $# + 1 ))
+
+    case "$CheeseCake" in
+      1) CheeseCake="Shinonome Ena" ;;
+      2) CheeseCake="Shinonome Akito" ;;
+    esac
+  else
+    err "Command 'od' not found! Defaulting to Ena."
+    CheeseCake="Shinonome Ena"
+  fi
+
+  log "Got : $CheeseCake"
+
+  info "Cheese cake fight" "$CheeseCake wins."
 }
 
 # Capitalized modules are user-facing modules
@@ -881,6 +900,7 @@ main() {
   # This module is just for fun.
   # TransFlag
   # Mizuki so tuff TransFlag module exists
+  # CheeseCakeFight
 }
 
 fetch_info="$(main)"
