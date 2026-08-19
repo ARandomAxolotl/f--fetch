@@ -683,25 +683,21 @@ Language() {
 }
 
 Colors() {
-  printf '%s███%s' "$BLACK" "$RESET"
-  printf '%s███%s' "$RED" "$RESET"
-  printf '%s███%s' "$GREEN" "$RESET"
-  printf '%s███%s' "$YELLOW" "$RESET"
-  printf '%s███%s' "$BLUE" "$RESET"
-  printf '%s███%s' "$MAGENTA" "$RESET"
-  printf '%s███%s' "$CYAN" "$RESET"
-  printf '%s███%s' "$WHITE" "$RESET"
-  printf '\n'
+    for color in \
+        "$BLACK" "$RED" "$GREEN" "$YELLOW" \
+        "$BLUE" "$MAGENTA" "$CYAN" "$WHITE"
+    do
+        printf '%s███%s' "$color" "$RESET"
+    done
+    printf '\n'
 
-  printf '%s███%s' "$BRIGHT_BLACK" "$RESET"
-  printf '%s███%s' "$BRIGHT_RED" "$RESET"
-  printf '%s███%s' "$BRIGHT_GREEN" "$RESET"
-  printf '%s███%s' "$BRIGHT_YELLOW" "$RESET"
-  printf '%s███%s' "$BRIGHT_BLUE" "$RESET"
-  printf '%s███%s' "$BRIGHT_MAGENTA" "$RESET"
-  printf '%s███%s' "$BRIGHT_CYAN" "$RESET"
-  printf '%s███%s' "$BRIGHT_WHITE" "$RESET"
-  printf '\n'
+    for color in \
+        "$BRIGHT_BLACK" "$BRIGHT_RED" "$BRIGHT_GREEN" "$BRIGHT_YELLOW" \
+        "$BRIGHT_BLUE" "$BRIGHT_MAGENTA" "$BRIGHT_CYAN" "$BRIGHT_WHITE"
+    do
+        printf '%s███%s' "$color" "$RESET"
+    done
+    printf '\n'
 }
 
 Break() {
