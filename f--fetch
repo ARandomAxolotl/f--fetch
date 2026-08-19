@@ -837,7 +837,7 @@ Host(){
   case "$OS" in
     Darwin)
       if [ -x appledetector ]; then
-        info "Host" "$(appledetector)"
+        info "Host" "$(./appledetector)"
       fi
       ;;
     Linux)
