@@ -68,6 +68,18 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - od, to get 32 bytes from /dev/random
 
+- curl, to fetch artwork
+
+- chafa, to render artwork
+
+- lspci, to get gpu name 
+
+- grep, sed, to parse lspci for gpu name
+
+- date, to get uptime on Darwin
+
+- timedatectl, to get local time and timezone
+
 ## Usage : 
 
 ./f--fetch : print the pretty fetch
