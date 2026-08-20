@@ -866,6 +866,14 @@ CheeseCakeFight(){
   info "Cheese cake fight" "$CheeseCake wins."
 }
 
+MyVersion(){
+  if hascmd git && git rev-parse --is-inside-work-tree >/dev/null 2>/dev/null; then
+    info "f--fetch ver" "Commit $(git rev-parse --short HEAD)"
+  else
+    info "f--fetch ver" "$BOLD${RED}idk"
+  fi
+}
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
 main() {
@@ -892,6 +900,7 @@ main() {
   Editor
   Visual
   Break
+  MyVersion
   Colors
   Break
   AkiyamaMizukiIsTuff
