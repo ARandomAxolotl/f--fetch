@@ -591,7 +591,9 @@ if hascmd wc; then
         printf ', '
       fi
       log "Waiting for winget..."
-      printf 'winget(%s)' "$(($(winget list | wc -l) - 2))"
+      WingetWinget=$(( $(winget list --source winget | wc -l) - 2 ))
+      WingetMsstor=$(( $(winget list --source msstore | wc -l) - 2 ))
+      printf 'winget(winget : %s, msstore : %s)' "$WingetWinget" "$WingetMsstor"
     fi
 
     if hascmd choco; then
@@ -874,6 +876,37 @@ MyVersion(){
   fi
 }
 
+CrrMoonPhrase(){
+  if hascmd date; then
+    newmoon=947182440
+    month=2551443
+    now=$(date +%s)
+    age=$(( (now - newmoon) % month ))
+
+    case $(( (age * 16 + month) / (2 * month) )) in
+      0) moon=🌑;;
+      1) moon=🌒;;
+      2) moon=🌒;;
+      3) moon=🌓;;
+      4) moon=🌔;;
+      5) moon=🌔;;
+      6) moon=🌔;;
+      7) moon=🌕;;
+      8) moon=🌕;;
+      9) moon=🌖;;
+      10) moon=🌖;;
+      11) moon=🌖;;
+      12) moon=🌗;;
+      13) moon=🌘;;
+      14) moon=🌘;;
+      15) moon=🌘;;
+    esac
+    info "Moon phrase" "$moon"
+  else
+      err "cannot find date, cannot calculate today's moon phrase :("
+  fi
+}
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
 main() {
@@ -902,6 +935,7 @@ main() {
   Break
   MyVersion
   Colors
+  CrrMoonPhrase
   Break
   AkiyamaMizukiIsTuff
   # Break

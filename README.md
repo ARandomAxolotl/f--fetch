@@ -76,7 +76,7 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - grep, sed, to parse lspci for gpu name
 
-- date, to get uptime on Darwin
+- date, to get uptime on Darwin and current date
 
 - timedatectl, to get local time and timezone
 
@@ -157,3 +157,5 @@ Enables or disables using music artwork as the logo.
 <!-- TransFlag -->
 
 <!-- CheeseCakeFight -->
+
+<!-- CrrMoonPhrase -->
