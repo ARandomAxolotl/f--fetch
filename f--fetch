@@ -322,9 +322,18 @@ Linux | MINGW* | MSYS* | CYGWIN*)
       err "${UNDERLINE}/etc/os-release$RESET${RED} not found! Bro have no identity like Mafuyu."
     fi
   else
-    OS() {
-      info "OS" "${YELLOW}Windows"
-    }
+    if hascmd systeminfo && hascmd awk; then
+      WinOS=$(systeminfo 2>/dev/null | awk -F': *' '$1 ~ /OS Name/ { print $2 }')
+      OS() {
+        info "OS" "$WinOS"
+        log "Got Windows : $WinOS"
+      }
+    else
+      err "${UNDERLINE}systeminfo/awk$RESET${RED} not found, defaulting to windows."
+      OS(){
+        info "OS" "${YELLOW}Windows"
+      }
+    fi
   fi
 
   if hascmd awk; then
