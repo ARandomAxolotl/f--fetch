@@ -984,6 +984,10 @@ CrrMoonPhrase(){
   fi
 }
 
+log "----------------------------------"
+log "Selected modules for this platform"
+log "----------------------------------"
+
 # Capitalized modules are user-facing modules
 # Do NOT use uncapitalized modules in main
 main() {
@@ -1023,10 +1027,46 @@ main() {
   # CheeseCakeFight
 }
 
-if [ -f config ]; then
-  log "Config found! Sourcing it..."
-  . ./config
-  log "Sourced config"
+if ! [ "mizuki$HOME" = "mizuki" ]; then
+  CfgHome="$HOME/.config/f--fetch/f--fetch"
+fi
+
+if hascmd pwd; then
+  CfgLocal="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)/config"
+fi
+
+if [ "$1" = "-c" ]; then
+  shift
+  if [ -f "$1" ]; then
+    . "$1"
+    cfg=1
+  else
+    printf '%s\n' "$RED${UNDERLINE}$1$RESET${RED} doesn't exist!$RESET"
+    exit 1
+  fi
+else
+  if ! [ "ena$CfgHome$CfgLocal" = "ena" ]; then
+    log "Finding config in:"
+    [ -n "$CfgHome" ] && log "  $CfgHome"
+    [ -n "$CfgLocal" ] && log "  $CfgLocal"
+
+    for cfgpath in "$CfgHome" "$CfgLocal"; do
+      if [ -f "$cfgpath" ]; then
+        log "Config found at $cfgpath. Sourcing it..."
+        if . "$cfgpath"; then
+          log "Sourced config"
+          cfg=1
+          break
+        else
+          log "Failed to source config, Mafuyu is disappointed at you."
+        fi
+      fi
+    done
+  fi
+fi
+
+if [ "kanade$cfg" = "kanade" ]; then
+  log "Config not found(maybe). Using default one..."
 fi
 
 fetch_info="$(main)"

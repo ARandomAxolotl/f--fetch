@@ -80,15 +80,31 @@ Move to directory that's in PATH if you want to (like `~/.local/bin`)
 
 - timedatectl, to get local time and timezone
 
+- pwd, to get the absolute path of the directory containing the script
+
 ## Usage : 
 
 ./f--fetch : print the pretty fetch
 
-./f--fetch --verbose : print the fetch with logs and errors
+--verbose : print the fetch with logs and errors
+
+--gen-config [path] : create default config, will create a file called `config` at the directory the script is currently inside or override [path] if provided
+
+-c [config] : use config at [config]
+
+> Note : `--gen-config` and `-c` can be combined with `--verbose` with `--verbose` as the first argument
 
 ## Customization : 
 
-Edit the main() function in the script
+Edit the main() function in the script or put your config at `~/.config/f--fetch/f--fetch`, `[the directory that contains the script]/config` or use `-c`
+
+### Configuration : 
+
+WARNING : the config will be **executed as shell code**
+
+> it can execute stuff
+
+It's just like editing main()
 
 ### Modules list : 
 
@@ -159,3 +175,5 @@ Enables or disables using music artwork as the logo.
 <!-- CheeseCakeFight -->
 
 <!-- CrrMoonPhrase -->
+
+<sup><sub> Please dont be genderism Mizuki is very tuff </sub></sup>
