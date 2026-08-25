@@ -26,8 +26,6 @@ jobs:
       - name: Run f--fetch
         shell: bash
         run: ./f--fetch --verbose
-
-jobs:
   alpine:
     runs-on: ubuntu-latest
     container:
