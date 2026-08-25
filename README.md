@@ -30,7 +30,7 @@
 
 - Android (BlissOS x86) with termux
 
-- Github actions(ubuntu-latest)
+- Github actions
 
 ## Installation : 
 
