@@ -1,21 +1,28 @@
-name: f--fetch but on poor ubuntu vm
+name: poor github actions vm
 
 on:
   workflow_dispatch:
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Make executable
+        shell: bash
         run: chmod +x ./f--fetch
 
       - name: Run f--fetch
-        run: ./f--fetch
-
-      - name: Run verbose
+        shell: bash
         run: ./f--fetch --verbose

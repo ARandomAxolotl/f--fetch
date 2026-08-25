@@ -30,6 +30,8 @@
 
 - Android (BlissOS x86) with termux
 
+- Github actions(ubuntu-latest)
+
 ## Installation : 
 
 Download the script
