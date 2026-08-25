@@ -26,3 +26,22 @@ jobs:
       - name: Run f--fetch
         shell: bash
         run: ./f--fetch --verbose
+
+jobs:
+  alpine:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+
+    steps:
+      - name: Install dependencies
+        run: apk add --no-cache git bash
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run f--fetch
+        shell: bash
+        run: |
+          chmod +x ./f--fetch
+          ./f--fetch --verbose
