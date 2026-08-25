@@ -1,0 +1,296 @@
+#!/bin/zsh
+
+model="$(uname -m)"
+
+case "$model" in
+  # iPhone gang
+  iPhone18,5) Device='iPhone 17e' ;;
+  iPhone18,2) Device='iPhone 17 Pro Max' ;;
+  iPhone18,1) Device='iPhone 17 Pro' ;;
+  iPhone18,4) Device='iPhone Air' ;;
+  iPhone18,3) Device='iPhone 17' ;;
+  iPhone17,5) Device='iPhone 16e' ;;
+  iPhone17,2) Device='iPhone 16 Pro Max' ;;
+  iPhone17,1) Device='iPhone 16 Pro' ;;
+  iPhone17,4) Device='iPhone 16 Plus' ;;
+  iPhone17,3) Device='iPhone 16' ;;
+  iPhone16,2) Device='iPhone 15 Pro Max' ;;
+  iPhone16,1) Device='iPhone 15 Pro' ;;
+  iPhone15,5) Device='iPhone 15 Plus' ;;
+  iPhone15,4) Device='iPhone 15' ;;
+  iPhone15,3) Device='iPhone 14 Pro Max' ;;
+  iPhone15,2) Device='iPhone 14 Pro' ;;
+  iPhone14,8) Device='iPhone 14 Plus' ;;
+  iPhone14,7) Device='iPhone 14' ;;
+  iPhone14,6) Device='iPhone SE (third gen)' ;;
+  iPhone14,3) Device='iPhone 13 Pro Max' ;;
+  iPhone14,5) Device='iPhone 13' ;;
+  iPhone14,4) Device='iPhone 13 Mini' ;;
+  iPhone13,4) Device='iPhone 12 Pro Max' ;;
+  iPhone13,3) Device='iPhone 12 Pro' ;;
+  iPhone13,2) Device='iPhone 12' ;;
+  iPhone13,1) Device='iPhone 12 Mini' ;;
+  iPhone12,8) Device='iPhone SE(second gen)' ;;
+  iPhone12,5) Device='iPhone 11 Pro Max' ;;
+  iPhone12,3) Device='iPhone 11 Pro' ;;
+  iPhone12,1) Device='iPhone 11' ;;
+  iPhone11,6) Device='iPhone XS Max' ;;
+  iPhone11,2) Device='iPhone XS' ;;
+  iPhone11,8) Device='iPhone XR' ;;
+  iPhone10,6) Device='iPhone X' ;;
+  iPhone10,5|iPhone10,2) Device='iPhone 8 Plus' ;;
+  iPhone10,4|iPhone10,1) Device='iPhone 8' ;;
+  iPhone9,2|iPhone9,4) Device='iPhone 7 Plus' ;;
+  iPhone9,1|iPhone9,3) Device='iPhone 7' ;;
+  iPhone8,4) Device='iPhone SE(first gen)' ;;
+  iPhone8,2) Device='iPhone 6s Plus' ;;
+  iPhone8,1) Device='iPhone 6s' ;;
+  iPhone7,1) Device='iPhone 6 Plus' ;;
+  iPhone7,2) Device='iPhone 6' ;;
+  iPhone6,1|iPhone6,2) Device='iPhone 5s' ;;
+  iPhone5,3|iPhone5,4) Device='iPhone 5c' ;;
+  iPhone5,1|iPhone5,2) Device='iPhone 5' ;;
+  iPhone4,1) Device='iPhone 4s' ;;
+  iPhone3*) Device='iPhone 4' ;;
+  iPhone2*) Device='iPhone 3GS' ;;
+  iPhone1,2) Device='iPhone 3G' ;;
+  iPhone1,1) Device='iPhone (first gen)' ;;
+
+  # iPad gang
+  iPad16,10|iPad16,11) Device='iPad Air 13-inch (M4)' ;;
+  iPad16,8|iPad16,9) Device='iPad Air 11-inch (M4)' ;;
+  iPad17,3|iPad17,4) Device='iPad Pro 13-inch (M5)' ;;
+  iPad17,1|iPad17,2) Device='iPad Pro 11-inch (M5)' ;;
+  iPad15,7|iPad15,8) Device='iPad (A16)' ;;
+  iPad15,5|iPad15,6) Device='iPad Air 13-inch (M3)' ;;
+  iPad15,3|iPad15,4) Device='iPad Air 11-inch (M3)' ;;
+  iPad16,1|iPad16,2) Device='iPad mini (A17 Pro)' ;;
+  iPad14,10|iPad14,11) Device='iPad Air 13-inch (M2)' ;;
+  iPad14,8|iPad14,9) Device='iPad Air 11-inch (M2)' ;;
+  iPad16,5|iPad16,6) Device='iPad Pro 13-inch (M4)' ;;
+  iPad16,3|iPad16,4) Device='iPad Pro 11-inch (M4)' ;;
+  iPad13,18|iPad13,19) Device='iPad (10th gen)' ;;
+  iPad14,5|iPad14,6) Device='iPad Pro 12.9-inch (6th gen)' ;;
+  iPad14,3|iPad14,4) Device='iPad Pro 11-inch (4th gen)' ;;
+  iPad13,16|iPad13,17) Device='iPad Air (5th gen)' ;;
+  iPad12,1|iPad12,2) Device='iPad (9th gen)' ;;
+  iPad14,1|iPad14,2) Device='iPad mini (6th gen)' ;;
+  iPad13,8|iPad13,9|iPad13,10|iPad13,11) Device='iPad Pro 12.9-inch (5th gen)' ;;
+  iPad13,4|iPad13,5|iPad13,6|iPad13,7) Device='iPad Pro 11-inch (3rd gen)' ;;
+  iPad13,1|iPad13,2) Device='iPad Air (4th gen)' ;;
+  iPad11,6|iPad11,7) Device='iPad (8th gen)' ;;
+  iPad8,11|iPad8,12) Device='iPad Pro 12.9-inch (4th gen)' ;;
+  iPad8,9|iPad8,10) Device='iPad Pro 11-inch (2nd gen)' ;;
+  iPad7,11|iPad7,12) Device='iPad (7th gen)' ;;
+  iPad11,3|iPad11,4) Device='iPad Air (3rd gen)' ;;
+  iPad11,1|iPad11,2) Device='iPad mini (5th gen)' ;;
+  iPad8,5|iPad8,6|iPad8,7|iPad8,8) Device='iPad Pro 12.9-inch (3rd gen)' ;;
+  iPad8,1|iPad8,2|iPad8,3|iPad8,4) Device='iPad Pro 11-inch (1st gen)' ;;
+  iPad7,5|iPad7,6) Device='iPad (6th gen)' ;;
+  iPad7,1|iPad7,2) Device='iPad Pro 12.9-inch (2nd gen)' ;;
+  iPad7,3|iPad7,4) Device='iPad Pro 10.5-inch' ;;
+  iPad6,11|iPad6,12) Device='iPad (5th gen)' ;;
+  iPad6,3|iPad6,4) Device='iPad Pro 9.7-inch' ;;
+  iPad6,7|iPad6,8) Device='iPad Pro 12.9-inch (1st gen)' ;;
+  iPad5,1|iPad5,2) Device='iPad mini 4' ;;
+  iPad5,3|iPad5,4) Device='iPad Air 2' ;;
+  iPad4,7|iPad4,8|iPad4,9) Device='iPad mini 3' ;;
+  iPad4,4|iPad4,5|iPad4,6) Device='iPad mini 2' ;;
+  iPad4,1|iPad4,2|iPad4,3) Device='iPad Air' ;;
+  iPad3,4|iPad3,5|iPad3,6) Device='iPad (4th gen)' ;;
+  iPad3,1|iPad3,2|iPad3,3) Device='iPad (3rd gen)' ;;
+  iPad2,5|iPad2,6|iPad2,7) Device='iPad mini' ;;
+  iPad2,1|iPad2,2|iPad2,3|iPad2,4) Device='iPad 2' ;;
+  iPad1,1) Device='iPad (1st gen)' ;;
+
+
+  # Mac gang
+
+  # MacBook Air
+  Mac17,1) Device='MacBook Air (M3, 2024)' ;;
+  Mac16,13) Device='MacBook Air 15-inch (M3, 2024)' ;;
+  Mac16,12) Device='MacBook Air 13-inch (M3, 2024)' ;;
+  Mac15,15) Device='MacBook Air 15-inch (M2, 2023)' ;;
+  Mac14,2) Device='MacBook Air 13-inch (M2, 2022)' ;;
+  MacBookAir10,1) Device='MacBook Air (M1, 2020)' ;;
+  MacBookAir9,1) Device='MacBook Air (2020)' ;;
+  MacBookAir8,2) Device='MacBook Air (2019)' ;;
+  MacBookAir8,1) Device='MacBook Air (2018)' ;;
+  MacBookAir7,2) Device='MacBook Air (2017)' ;;
+  MacBookAir7,1) Device='MacBook Air (2015)' ;;
+  MacBookAir6,2) Device='MacBook Air (2013-2017)' ;;
+  MacBookAir6,1) Device='MacBook Air (2013-2015)' ;;
+  MacBookAir5,2) Device='MacBook Air (2012)' ;;
+  MacBookAir5,1) Device='MacBook Air (2012)' ;;
+  MacBookAir4,2) Device='MacBook Air (2011)' ;;
+  MacBookAir4,1) Device='MacBook Air (2011)' ;;
+  MacBookAir3,2) Device='MacBook Air (2010)' ;;
+  MacBookAir3,1) Device='MacBook Air (2010)' ;;
+  MacBookAir2,1) Device='MacBook Air (2008-2009)' ;;
+
+  # MacBook Pro - Apple Silicon
+  Mac17,2) Device='MacBook Pro 14-inch (M4)' ;;
+  Mac17,3) Device='MacBook Pro 16-inch (M4)' ;;
+  Mac16,8) Device='MacBook Pro 14-inch (M3)' ;;
+  Mac16,7) Device='MacBook Pro 16-inch (M3)' ;;
+  Mac15,10) Device='MacBook Pro 14-inch (M3)' ;;
+  Mac15,9) Device='MacBook Pro 16-inch (M3)' ;;
+  Mac15,7) Device='MacBook Pro 14-inch (M2 Pro/Max)' ;;
+  Mac15,6) Device='MacBook Pro 16-inch (M2 Pro/Max)' ;;
+  Mac14,10) Device='MacBook Pro 14-inch (M2 Pro/Max)' ;;
+  Mac14,9) Device='MacBook Pro 16-inch (M2 Pro/Max)' ;;
+  MacBookPro18,4) Device='MacBook Pro 14-inch (M1 Pro/Max)' ;;
+  MacBookPro18,3) Device='MacBook Pro 14-inch (M1)' ;;
+  MacBookPro18,2) Device='MacBook Pro 16-inch (M1 Max)' ;;
+  MacBookPro18,1) Device='MacBook Pro 16-inch (M1 Pro)' ;;
+  MacBookPro17,1) Device='MacBook Pro 13-inch (M1)' ;;
+
+  # MacBook Pro - Intel
+  MacBookPro16,4) Device='MacBook Pro 16-inch (2019)' ;;
+  MacBookPro16,3) Device='MacBook Pro 13-inch (2020, 4 Thunderbolt)' ;;
+  MacBookPro16,2) Device='MacBook Pro 13-inch (2020)' ;;
+  MacBookPro16,1) Device='MacBook Pro 16-inch (2019)' ;;
+  MacBookPro15,4) Device='MacBook Pro 13-inch (2019-2020)' ;;
+  MacBookPro15,3) Device='MacBook Pro 15-inch (2019)' ;;
+  MacBookPro15,2) Device='MacBook Pro 13-inch (2018-2019)' ;;
+  MacBookPro15,1) Device='MacBook Pro 15-inch (2018-2019)' ;;
+  MacBookPro14,3) Device='MacBook Pro 15-inch (2017)' ;;
+  MacBookPro14,2) Device='MacBook Pro 13-inch (2017)' ;;
+  MacBookPro14,1) Device='MacBook Pro 13-inch (2017)' ;;
+  MacBookPro13,3) Device='MacBook Pro 15-inch (2016)' ;;
+  MacBookPro13,2) Device='MacBook Pro 13-inch (2016)' ;;
+  MacBookPro13,1) Device='MacBook Pro 13-inch (2016)' ;;
+  MacBookPro12,1) Device='MacBook Pro 13-inch (2015)' ;;
+  MacBookPro11,5) Device='MacBook Pro 15-inch (2015)' ;;
+  MacBookPro11,4) Device='MacBook Pro 15-inch (2015)' ;;
+  MacBookPro11,3) Device='MacBook Pro 15-inch (2013-2014)' ;;
+  MacBookPro11,2) Device='MacBook Pro 15-inch (2013)' ;;
+  MacBookPro11,1) Device='MacBook Pro 13-inch Retina (2013-2014)' ;;
+  MacBookPro10,2) Device='MacBook Pro 13-inch Retina (2012-2013)' ;;
+  MacBookPro10,1) Device='MacBook Pro 15-inch Retina (2012-2013)' ;;
+  MacBookPro9,2) Device='MacBook Pro 13-inch (2012)' ;;
+  MacBookPro9,1) Device='MacBook Pro 15-inch (2012)' ;;
+  MacBookPro8,3) Device='MacBook Pro 17-inch (2011)' ;;
+  MacBookPro8,2) Device='MacBook Pro 15-inch (2011)' ;;
+  MacBookPro8,1) Device='MacBook Pro 13-inch (2011)' ;;
+  MacBookPro7,1) Device='MacBook Pro 13-inch (2010)' ;;
+  MacBookPro6,2) Device='MacBook Pro 15-inch (2010)' ;;
+  MacBookPro6,1) Device='MacBook Pro 17-inch (2010)' ;;
+  MacBookPro5,5) Device='MacBook Pro 13-inch (2009)' ;;
+  MacBookPro5,4) Device='MacBook Pro 15-inch (2009)' ;;
+  MacBookPro5,3) Device='MacBook Pro 15-inch (2009)' ;;
+  MacBookPro5,2) Device='MacBook Pro 17-inch (2009)' ;;
+  MacBookPro5,1) Device='MacBook Pro 15-inch (2008)' ;;
+  MacBookPro4,1) Device='MacBook Pro 15-inch/17-inch (2008)' ;;
+  MacBookPro3,1) Device='MacBook Pro (2007-2008)' ;;
+  MacBookPro2,2) Device='MacBook Pro (2006)' ;;
+  MacBookPro2,1) Device='MacBook Pro 17-inch (2006)' ;;
+  MacBookPro1,2) Device='MacBook Pro 17-inch (2006)' ;;
+  MacBookPro1,1) Device='MacBook Pro 15-inch (2006)' ;;
+
+  # Mac mini
+  Macmini10,1) Device='Mac mini (M2/M2 Pro, 2023)' ;;
+  Macmini9,1) Device='Mac mini (M1, 2020)' ;;
+  Macmini8,1) Device='Mac mini (2018)' ;;
+  Macmini7,1) Device='Mac mini (2014)' ;;
+  Macmini6,2) Device='Mac mini (2012)' ;;
+  Macmini6,1) Device='Mac mini (2012)' ;;
+  Macmini5,3) Device='Mac mini (2011)' ;;
+  Macmini5,2) Device='Mac mini (2011)' ;;
+  Macmini5,1) Device='Mac mini (2011)' ;;
+  Macmini4,1) Device='Mac mini (2010)' ;;
+  Macmini3,1) Device='Mac mini (2009)' ;;
+  Macmini2,1) Device='Mac mini (2007)' ;;
+  Macmini1,1) Device='Mac mini (2006)' ;;
+
+  # iMac
+  iMac20,2) Device='iMac 24-inch (M1, 2021)' ;;
+  iMac21,1) Device='iMac 24-inch (M1, 2021)' ;;
+  iMac19,2) Device='iMac 21.5-inch (2019)' ;;
+  iMac19,1) Device='iMac 27-inch (2019-2020)' ;;
+  iMac18,3) Device='iMac 27-inch (2017)' ;;
+  iMac18,2) Device='iMac 21.5-inch (2017)' ;;
+  iMac18,1) Device='iMac 21.5-inch (2017)' ;;
+  iMac17,1) Device='iMac 27-inch Retina (2015)' ;;
+  iMac16,2) Device='iMac 21.5-inch Retina (2015)' ;;
+  iMac16,1) Device='iMac 21.5-inch (2015)' ;;
+  iMac15,1) Device='iMac 27-inch Retina (2014)' ;;
+  iMac14,4) Device='iMac 21.5-inch (2014)' ;;
+  iMac14,3) Device='iMac 21.5-inch (2013)' ;;
+  iMac14,2) Device='iMac 27-inch (2013)' ;;
+  iMac14,1) Device='iMac 21.5-inch (2013)' ;;
+  iMac13,2) Device='iMac 27-inch (2012)' ;;
+  iMac13,1) Device='iMac 21.5-inch (2012)' ;;
+  iMac12,2) Device='iMac 27-inch (2011)' ;;
+  iMac12,1) Device='iMac 21.5-inch (2011)' ;;
+  iMac11,3) Device='iMac 27-inch (2010)' ;;
+  iMac11,2) Device='iMac 21.5-inch (2010)' ;;
+  iMac11,1) Device='iMac 27-inch (2009)' ;;
+  iMac10,1) Device='iMac 21.5-inch (2009)' ;;
+  iMac9,1) Device='iMac (2009)' ;;
+  iMac8,1) Device='iMac (2008)' ;;
+  iMac7,1) Device='iMac (2007)' ;;
+  iMac6,1) Device='iMac (2006)' ;;
+  iMac5,2) Device='iMac (2006)' ;;
+  iMac5,1) Device='iMac (2006)' ;;
+  iMac4,1) Device='iMac (2006)' ;;
+
+  # Mac Studio
+  Mac14,13) Device='Mac Studio (M2 Ultra)' ;;
+  Mac14,14) Device='Mac Studio (M2 Max)' ;;
+  Mac13,2) Device='Mac Studio (M1 Ultra)' ;;
+  Mac13,1) Device='Mac Studio (M1 Max)' ;;
+
+  # Mac Pro
+  Mac14,8) Device='Mac Pro (M2 Ultra, 2023)' ;;
+  MacPro7,1) Device='Mac Pro (2019)' ;;
+  MacPro6,1) Device='Mac Pro (Late 2013)' ;;
+  MacPro5,1) Device='Mac Pro (2010-2012)' ;;
+  MacPro4,1) Device='Mac Pro (2009)' ;;
+  MacPro3,1) Device='Mac Pro (2008)' ;;
+  MacPro2,1) Device='Mac Pro (2007)' ;;
+  MacPro1,1) Device='Mac Pro (2006)' ;;
+
+  # MacBook
+  MacBook10,1) Device='MacBook 12-inch (2017)' ;;
+  MacBook9,1) Device='MacBook 12-inch (2016)' ;;
+  MacBook8,1) Device='MacBook 12-inch (2015)' ;;
+  MacBook7,1) Device='MacBook 13-inch (2010)' ;;
+  MacBook6,1) Device='MacBook 13-inch (2009)' ;;
+  MacBook5,2) Device='MacBook 13-inch (2009)' ;;
+  MacBook5,1) Device='MacBook 13-inch (2008)' ;;
+  MacBook4,1) Device='MacBook 13-inch (2008)' ;;
+  MacBook3,1) Device='MacBook 13-inch (2007)' ;;
+  MacBook2,1) Device='MacBook 13-inch (2006-2007)' ;;
+  MacBook1,1) Device='MacBook 13-inch (2006)' ;;
+
+  # Apple Watch gang
+  Watch7,1|Watch7,2) Device='Apple Watch Series 7' ;;
+  Watch7,3|Watch7,4) Device='Apple Watch Series 8' ;;
+  Watch6,1|Watch6,2) Device='Apple Watch Series 6' ;;
+  Watch6,3|Watch6,4) Device='Apple Watch SE (2nd gen)' ;;
+  Watch5,1|Watch5,2|Watch5,3|Watch5,4) Device='Apple Watch Series 5' ;;
+  Watch4,1|Watch4,2|Watch4,3|Watch4,4) Device='Apple Watch Series 4' ;;
+  Watch3,1|Watch3,2|Watch3,3|Watch3,4) Device='Apple Watch Series 3' ;;
+  Watch2,6|Watch2,7) Device='Apple Watch Series 1' ;;
+  Watch2,3|Watch2,4) Device='Apple Watch Series 2' ;;
+  Watch1,1|Watch1,2) Device='Apple Watch (1st gen)' ;;
+
+  # HomePod gang
+  AudioAccessory6,1) Device='HomePod (2nd gen)' ;;
+  AudioAccessory5,1) Device='HomePod mini' ;;
+  AudioAccessory1,1) Device='HomePod' ;;
+
+  # iPod gang
+  iPod9,1) Device='iPod touch (7th gen)' ;;
+  iPod7,1) Device='iPod touch (6th gen)' ;;
+  iPod5,1) Device='iPod touch (5th gen)' ;;
+  iPod4,1) Device='iPod touch (4th gen)' ;;
+  iPod3,1) Device='iPod touch (3rd gen)' ;;
+  iPod2,1) Device='iPod touch (2nd gen)' ;;
+  iPod1,1) Device='iPod touch (1st gen)' ;;
+
+  *) exit 1 ;;
+esac
+
+printf "$Device"

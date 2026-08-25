@@ -1,0 +1,21 @@
+name: f--fetch but on poor ubuntu vm
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make executable
+        run: chmod +x ./f--fetch
+
+      - name: Run f--fetch
+        run: ./f--fetch
+
+      - name: Run verbose
+        run: ./f--fetch --verbose
