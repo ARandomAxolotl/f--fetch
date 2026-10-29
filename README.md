@@ -32,6 +32,8 @@
 
 - Github actions
 
+- [Linux Runner](https://github.com/mxhm11cr/LinuxRunner) on the same iPhone 8 plus
+
 ## Installation : 
 
 Download the script
