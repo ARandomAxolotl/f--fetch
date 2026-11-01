@@ -34,6 +34,8 @@
 
 - [Linux Runner](https://github.com/mxhm11cr/LinuxRunner) on the same iPhone 8 plus
 
+- Jailbroken iOS 9, iPad mini 1st gen
+
 ## Installation : 
 
 Download the script
