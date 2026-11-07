@@ -36,6 +36,8 @@
 
 - Jailbroken iOS 9, iPad mini 1st gen
 
+- Same iPad mini 1st gen, but in ssh ramdisk
+
 ## Installation : 
 
 Download the script

@@ -286,7 +286,12 @@ Darwin)
   }
 
   OS() {
-    case "$(sysctl -n hw.product)" in
+    OSName="$(sysctl -n hw.product 2>/dev/null)"
+    if [ "mizuki$OSName" = "mizuki" ]; then
+      OSName="$(sysctl -n hw.machine)"
+    fi
+
+    case "$OSName" in
     iPhone*)
       DarwinOS=iOS
       ;;
@@ -369,6 +374,8 @@ Linux | MINGW* | MSYS* | CYGWIN*)
 
     if hascmd hostname; then
       printf '%s\n' "${BLUE}@$GREEN$(hostname)$RESET"
+    elif hascmd hostnamectl; then
+      printf '%s\n' "${BLUE}@$GREEN$(hostnamectl hostname)$RESET"
     else
       printf '%s\n' "@$BOLD${RED}idk$RESET"
       err "What PC is this with no fucking hostname????"
